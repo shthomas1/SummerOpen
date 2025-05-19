@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import "../styles/pages/Register.css";
 import { FaGithub } from "react-icons/fa";
-import React, { useState, useEffect, useCallback } from "react";
 
 const Register = () => {
   const [formData, setFormData] = useState({
