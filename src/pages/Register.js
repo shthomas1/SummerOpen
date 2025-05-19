@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "../styles/pages/Register.css";
 import { FaGithub } from "react-icons/fa";
+import React, { useState, useEffect, useCallback } from "react";
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -74,72 +75,75 @@ const Register = () => {
     if (code && !isAuthenticated) {
       exchangeCodeForToken(code);
     }
-  }, [isAuthenticated]);
+  }, [isAuthenticated, exchangeCodeForToken]);
 
-  const exchangeCodeForToken = async (code) => {
-    setLoading(true);
-    try {
-      // This would typically be handled by your backend to avoid exposing your client secret
-      const response = await fetch("/api/github-auth", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ code }),
-      });
+  const exchangeCodeForToken = useCallback(
+    async (code) => {
+      setLoading(true);
+      try {
+        const response = await fetch("/api/github-auth", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ code }),
+        });
 
-      const data = await response.json();
+        const data = await response.json();
 
-      if (data.access_token) {
-        fetchGitHubUserData(data.access_token);
-      }
-    } catch (error) {
-      console.error("Error exchanging code for token:", error);
-      setLoading(false);
-    }
-  };
-
-  const fetchGitHubUserData = async (token) => {
-    try {
-      const response = await fetch("https://api.github.com/user", {
-        headers: { Authorization: `token ${token}` },
-      });
-
-      const userData = await response.json();
-
-      // Also fetch user's email if not available in profile
-      let email = userData.email;
-      if (!email) {
-        const emailResponse = await fetch(
-          "https://api.github.com/user/emails",
-          {
-            headers: { Authorization: `token ${token}` },
-          }
-        );
-
-        const emails = await emailResponse.json();
-        const primaryEmail = emails.find((e) => e.primary) || emails[0];
-        if (primaryEmail) {
-          email = primaryEmail.email;
+        if (data.access_token) {
+          fetchGitHubUserData(data.access_token);
         }
+      } catch (error) {
+        console.error("Error exchanging code for token:", error);
+        setLoading(false);
       }
+    },
+    [fetchGitHubUserData]
+  );
 
-      // Pre-fill form with GitHub data
-      setFormData((prev) => ({
-        ...prev,
-        name: userData.name || userData.login,
-        email: email || "",
-        githubUsername: userData.login,
-      }));
+  const fetchGitHubUserData = useCallback(
+    async (token) => {
+      try {
+        const response = await fetch("https://api.github.com/user", {
+          headers: { Authorization: `token ${token}` },
+        });
 
-      setIsAuthenticated(true);
-    } catch (error) {
-      console.error("Error fetching user data:", error);
-    }
-    setLoading(false);
+        const userData = await response.json();
+
+        let email = userData.email;
+        if (!email) {
+          const emailResponse = await fetch(
+            "https://api.github.com/user/emails",
+            {
+              headers: { Authorization: `token ${token}` },
+            }
+          );
+
+          const emails = await emailResponse.json();
+          const primaryEmail = emails.find((e) => e.primary) || emails[0];
+          if (primaryEmail) {
+            email = primaryEmail.email;
+          }
+        }
+
+        setFormData((prev) => ({
+          ...prev,
+          name: userData.name || userData.login,
+          email: email || "",
+          githubUsername: userData.login,
+        }));
+
+        setIsAuthenticated(true);
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+      setLoading(false);
+    },
+    [setFormData, setIsAuthenticated]
+  );
+
+  const handleGitHubLogin = () => {
+    window.location.href = githubAuthUrl;
   };
-
-const handleGitHubLogin = () => {
-  window.location.href = githubAuthUrl;
-};
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
