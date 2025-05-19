@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { FaBars } from 'react-icons/fa';
+import { Link, useLocation } from 'react-router-dom';
 import Countdown from '../ui/Countdown';
 import '../../styles/layout/Header.css';
 
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const location = useLocation();
+  const isHomePage = location.pathname === '/';
   
   useEffect(() => {
     const handleScroll = () => {
@@ -22,30 +25,56 @@ const Header = () => {
   
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
+    if (isMenuOpen) {
+      document.body.style.overflow = 'auto';
+    } else {
+      document.body.style.overflow = 'hidden';
+    }
+  };
+  
+  // Function to create navigation links based on current page
+  const getNavLink = (sectionId, label) => {
+    if (isHomePage) {
+      // If we're already on the home page, use hash links
+      return (
+        <a href={`#${sectionId}`} className="nav-link" onClick={() => isMenuOpen && toggleMenu()}>
+          {label}
+        </a>
+      );
+    } else {
+      // If we're on another page, navigate to home page with hash
+      return (
+        <Link to={`/#${sectionId}`} className="nav-link" onClick={() => isMenuOpen && toggleMenu()}>
+          {label}
+        </Link>
+      );
+    }
   };
   
   return (
     <header className={`header ${isScrolled ? 'scrolled' : ''}`}>
       <div className="container">
         <div className="navbar">
-          <div className="logo">
+          <Link to="/" className="logo">
             <div className="logo-icon">&lt;/&gt;</div>
             <span>Summer Open</span>
-          </div>
+          </Link>
           
           <Countdown targetDate="2025-06-28T06:00:00" header={true} />
           
-          <button className="mobile-menu-btn" onClick={toggleMenu}>
+          <button className="mobile-menu-btn" onClick={toggleMenu} aria-label="Toggle menu">
             <FaBars />
           </button>
           
           <div className={`nav-links ${isMenuOpen ? 'open' : ''}`}>
-            <a href="#about" className="nav-link">About</a>
-            <a href="#schedule" className="nav-link">Schedule</a>
-            <a href="#benefits" className="nav-link">Benefits</a>
-            <a href="#mentors" className="nav-link">Mentors</a>
-            <a href="#faq" className="nav-link">FAQ</a>
-            <a href="/register" className="nav-cta">Register Now</a>
+            {getNavLink('about', 'About')}
+            {getNavLink('schedule', 'Schedule')}
+            {getNavLink('benefits', 'Benefits')}
+            {getNavLink('mentors', 'Mentors')}
+            {getNavLink('faq', 'FAQ')}
+            <Link to="/register" className="nav-cta" onClick={() => isMenuOpen && toggleMenu()}>
+              Register Now
+            </Link>
           </div>
         </div>
       </div>
