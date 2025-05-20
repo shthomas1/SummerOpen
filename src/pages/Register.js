@@ -13,11 +13,11 @@ const Register = () => {
     agreeTerms: false,
     githubUsername: "",
     categories: {
-      aiAssistants: false,
-      webDevelopment: false,
-      dataVisualization: false,
+      fullStackDev: false,
+      dataAnalytics: false,
+      dataParsing: false,
       gameDevelopment: false,
-      climateAction: false,
+      mobileAppDev: false,
     },
   });
 
@@ -260,7 +260,7 @@ const Register = () => {
           <form className="register-form" onSubmit={handleSubmit}>
             <div className="form-group">
               <label className="form-label" htmlFor="name">
-                Your Name (Or Nickname)
+                Your Name
               </label>
               <input
                 className="form-input"
@@ -271,6 +271,24 @@ const Register = () => {
                 onChange={handleChange}
                 required
               />
+            </div>
+
+            <div className="form-group">
+              <label className="form-label" htmlFor="email">
+                Email Address
+              </label>
+              <input
+                className="form-input"
+                type="email"
+                id="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                required
+              />
+              <small className="input-help">
+                We'll send hackathon updates to this email
+              </small>
             </div>
 
             <div className="form-group">
@@ -314,9 +332,38 @@ const Register = () => {
                 ))}
               </div>
             </div>
-            <label className="checkbox-label" htmlFor="agreeTerms">
-              I agree to the Terms of Service and have read the Privacy Policy
-            </label>
+
+            <div className="form-group full-width">
+              <label className="form-label" htmlFor="interests">
+                Tell us more about your project ideas
+              </label>
+              <textarea
+                className="form-textarea"
+                id="interests"
+                name="interests"
+                value={formData.interests}
+                onChange={handleChange}
+                placeholder="Share any specific project ideas or what you hope to learn during the hackathon..."
+              />
+            </div>
+
+            <div className="form-group full-width">
+              <div className="checkbox-group">
+                <input
+                  className="form-checkbox"
+                  type="checkbox"
+                  id="agreeTerms"
+                  name="agreeTerms"
+                  checked={formData.agreeTerms}
+                  onChange={handleChange}
+                  required
+                />
+                <label className="checkbox-label" htmlFor="agreeTerms">
+                  I agree to the Terms of Service and have read the Privacy
+                  Policy
+                </label>
+              </div>
+            </div>
 
             <div className="submit-group">
               <button className="submit-button" type="submit">
