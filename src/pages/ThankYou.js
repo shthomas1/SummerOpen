@@ -1,12 +1,28 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { FaCheckCircle, FaCalendarAlt, FaDiscord, FaGithub } from "react-icons/fa";
 import "../styles/pages/ThankYou.css";
 
 const ThankYou = () => {
-  // You could retrieve the user's name from localStorage or URL parameters if needed
-  // For this example, I'll just use a generic greeting
+  const [userData, setUserData] = useState({
+    name: "",
+    githubUsername: "",
+    email: ""
+  });
   
+  useEffect(() => {
+    // Retrieve user data from localStorage
+    try {
+      const storedUser = localStorage.getItem("registeredUser");
+      if (storedUser) {
+        const parsedUser = JSON.parse(storedUser);
+        setUserData(parsedUser);
+      }
+    } catch (error) {
+      console.error("Error retrieving user data:", error);
+    }
+  }, []);
+
   return (
     <div className="thank-you-page">
       <div className="container">
@@ -18,7 +34,12 @@ const ThankYou = () => {
           <h1 className="thank-you-title">Registration Complete!</h1>
           
           <p className="thank-you-message">
-            Thank you for registering for the Summer Open Hackathon. We're excited to have you join us for this coding adventure!
+            {userData.githubUsername ? (
+              <>Thank you <strong>{userData.githubUsername}</strong> for registering for the Summer Open Hackathon.</>
+            ) : (
+              <>Thank you for registering for the Summer Open Hackathon.</>
+            )} 
+            We're excited to have you join us for this coding adventure!
           </p>
           
           <div className="confirmation-details">
@@ -43,7 +64,7 @@ const ThankYou = () => {
                   <h3>Join Our Discord</h3>
                   <p>Connect with other participants, mentors, and organizers in our Discord community.</p>
                   <a 
-                    href="https://discord.gg/summerhackathon" 
+                    href="https://discord.gg/CZexBXcAfs"
                     className="discord-button"
                     target="_blank"
                     rel="noopener noreferrer"
@@ -67,7 +88,11 @@ const ThankYou = () => {
           
           <div className="email-confirmation">
             <h2>Check Your Email</h2>
-            <p>We've sent a confirmation email with additional details and resources to help you prepare for the hackathon.</p>
+            {userData.email ? (
+              <p>We've sent a confirmation email to <strong>{userData.email}</strong> with additional details and resources to help you prepare for the hackathon.</p>
+            ) : (
+              <p>We've sent a confirmation email with additional details and resources to help you prepare for the hackathon.</p>
+            )}
             <p className="email-note">If you don't see the email, please check your spam folder.</p>
           </div>
           
