@@ -98,34 +98,34 @@ const Register = () => {
   // Categories for the hackathon
   const categories = [
     {
-      id: "aiAssistants",
-      name: "AI Assistants & Tools",
+      id: "fullStackDev",
+      name: "Full Stack Development",
       description:
-        "Create intelligent assistants or tools that use AI to solve real-world problems",
+        "Build complete web applications with both frontend and backend components, showcasing end-to-end development skills",
     },
     {
-      id: "webDevelopment",
-      name: "Web3 & Decentralized Apps",
+      id: "dataAnalytics",
+      name: "Data Analytics",
       description:
-        "Build applications leveraging blockchain technology and decentralized networks",
+        "Create solutions that analyze, visualize, and extract insights from complex datasets to drive informed decision-making",
     },
     {
-      id: "dataVisualization",
-      name: "Data Visualization & Insights",
+      id: "dataParsing",
+      name: "Data Parsing",
       description:
-        "Transform complex data into visual stories that reveal meaningful patterns",
+        "Develop tools and algorithms that extract, transform, and process structured or unstructured data from various sources",
     },
     {
       id: "gameDevelopment",
       name: "Game Development",
       description:
-        "Design interactive gaming experiences with creative mechanics and engaging gameplay",
+        "Design interactive games with creative mechanics, engaging gameplay, and immersive experiences across platforms",
     },
     {
-      id: "climateAction",
-      name: "Climate Action Tech",
+      id: "mobileAppDev",
+      name: "Mobile App Development",
       description:
-        "Develop solutions addressing environmental challenges and promoting sustainability",
+        "Create innovative mobile applications for iOS, Android, or cross-platform that solve real-world problems",
     },
   ];
 
@@ -260,7 +260,7 @@ const Register = () => {
           <form className="register-form" onSubmit={handleSubmit}>
             <div className="form-group">
               <label className="form-label" htmlFor="name">
-                Your Name
+                Your Name (Or Nickname)
               </label>
               <input
                 className="form-input"
@@ -271,24 +271,6 @@ const Register = () => {
                 onChange={handleChange}
                 required
               />
-            </div>
-
-            <div className="form-group">
-              <label className="form-label" htmlFor="email">
-                Discord
-              </label>
-              <input
-                className="form-input"
-                type="email"
-                id="email"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-                required
-              />
-              <small className="input-help">
-                We'll send hackathon updates to this email
-              </small>
             </div>
 
             <div className="form-group">
@@ -332,38 +314,9 @@ const Register = () => {
                 ))}
               </div>
             </div>
-
-            <div className="form-group full-width">
-              <label className="form-label" htmlFor="interests">
-                Tell us more about your project ideas
-              </label>
-              <textarea
-                className="form-textarea"
-                id="interests"
-                name="interests"
-                value={formData.interests}
-                onChange={handleChange}
-                placeholder="Share any specific project ideas or what you hope to learn during the hackathon..."
-              />
-            </div>
-
-            <div className="form-group full-width">
-              <div className="checkbox-group">
-                <input
-                  className="form-checkbox"
-                  type="checkbox"
-                  id="agreeTerms"
-                  name="agreeTerms"
-                  checked={formData.agreeTerms}
-                  onChange={handleChange}
-                  required
-                />
-                <label className="checkbox-label" htmlFor="agreeTerms">
-                  I agree to the Terms of Service and have read the Privacy
-                  Policy
-                </label>
-              </div>
-            </div>
+            <label className="checkbox-label" htmlFor="agreeTerms">
+              I agree to the Terms of Service and have read the Privacy Policy
+            </label>
 
             <div className="submit-group">
               <button className="submit-button" type="submit">
