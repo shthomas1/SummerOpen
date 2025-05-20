@@ -275,7 +275,7 @@ const Register = () => {
 
             <div className="form-group">
               <label className="form-label" htmlFor="email">
-                Email Address
+                Discord
               </label>
               <input
                 className="form-input"
