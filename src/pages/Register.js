@@ -334,20 +334,6 @@ const Register = () => {
             </div>
 
             <div className="form-group full-width">
-              <label className="form-label" htmlFor="interests">
-                Tell us more about your project ideas
-              </label>
-              <textarea
-                className="form-textarea"
-                id="interests"
-                name="interests"
-                value={formData.interests}
-                onChange={handleChange}
-                placeholder="Share any specific project ideas or what you hope to learn during the hackathon..."
-              />
-            </div>
-
-            <div className="form-group full-width">
               <div className="checkbox-group">
                 <input
                   className="form-checkbox"
