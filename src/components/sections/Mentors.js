@@ -1,7 +1,7 @@
 import React from 'react';
 import '../../styles/sections/Mentors.css';
 import SectionHeader from '../ui/SectionHeader';
-import { FaLinkedinIn, FaWebsite, FaGithub, FaDribbble, FaMediumM } from 'react-icons/fa';
+import { FaLinkedinIn, FaGlobe, FaGithub, FaDribbble, FaMediumM } from 'react-icons/fa';
 import { mentorsData } from '../../data/mentors';
 
 const getSocialIcon = (platform) => {
@@ -9,7 +9,7 @@ const getSocialIcon = (platform) => {
     case 'linkedin':
       return <FaLinkedinIn />;
     case 'website':
-      return <FaWebsite />;
+      return <FaGlobe />; // Changed from FaWebsite to FaGlobe
     case 'github':
       return <FaGithub />;
     case 'dribbble':
@@ -42,7 +42,7 @@ const Mentors = () => {
                 <p className="mentor-bio">{mentor.bio}</p>
                 <div className="mentor-social">
                   {Object.entries(mentor.social).map(([platform, url]) => (
-                    <a key={platform} href={url} className="social-icon" aria-label={platform}>
+                    <a key={platform} href={url} className="social-icon" aria-label={platform} target="_blank" rel="noopener noreferrer">
                       {getSocialIcon(platform)}
                     </a>
                   ))}
