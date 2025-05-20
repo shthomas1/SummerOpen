@@ -1,15 +1,15 @@
 import React from 'react';
 import '../../styles/sections/Mentors.css';
 import SectionHeader from '../ui/SectionHeader';
-import { FaLinkedinIn, FaTwitter, FaGithub, FaDribbble, FaMediumM } from 'react-icons/fa';
+import { FaLinkedinIn, FaWebsite, FaGithub, FaDribbble, FaMediumM } from 'react-icons/fa';
 import { mentorsData } from '../../data/mentors';
 
 const getSocialIcon = (platform) => {
   switch (platform) {
     case 'linkedin':
       return <FaLinkedinIn />;
-    case 'twitter':
-      return <FaTwitter />;
+    case 'website':
+      return <FaWebsite />;
     case 'github':
       return <FaGithub />;
     case 'dribbble':

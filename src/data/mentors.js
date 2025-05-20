@@ -1,12 +1,12 @@
 export const mentorsData = [
   {
-    name: 'Alex Johnson',
+    name: 'Sean Thomas',
     role: 'Full Stack Developer',
-    bio: 'Experienced developer specializing in React and Node.js with 8+ years of industry experience.',
+    bio: 'Experienced developer specializing in React.',
     social: {
-      linkedin: '#',
-      twitter: '#',
-      github: '#'
+      linkedin: 'https://linkedin.com/in/seanhthomas',
+      website: 'https://seanhthomas.com',
+      github: 'https://github.com/shthomas1/'
     }
   },
   {
@@ -15,7 +15,7 @@ export const mentorsData = [
     bio: 'Award-winning designer with expertise in creating intuitive and accessible user experiences.',
     social: {
       linkedin: '#',
-      twitter: '#',
+      website: '#',
       dribbble: '#'
     }
   },
@@ -25,7 +25,7 @@ export const mentorsData = [
     bio: 'Researcher and practitioner in machine learning and artificial intelligence applications.',
     social: {
       linkedin: '#',
-      twitter: '#',
+      website: '#',
       github: '#'
     }
   },
@@ -35,7 +35,7 @@ export const mentorsData = [
     bio: 'Strategic product leader with experience launching successful tech products at scale.',
     social: {
       linkedin: '#',
-      twitter: '#',
+      website: '#',
       medium: '#'
     }
   }

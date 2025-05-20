@@ -17,7 +17,7 @@ export const benefitsData = [
   {
     icon: '🏆',
     title: 'Win Prizes',
-    description: 'Compete for exciting prizes and recognition for your innovative solutions across multiple categories.'
+    description: 'Compete for a chance to included in a stream or video by one of several event coordinators.'
   },
   {
     icon: '💡',

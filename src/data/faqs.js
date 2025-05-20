@@ -5,7 +5,7 @@ export const faqsData = [
   },
   {
     question: "How many people can be on a team?",
-    answer: "Teams can consist of 1-4 members. You can form a team before the event or find teammates during our team formation session at the beginning of the hackathon. We encourage diverse teams with complementary skills."
+    answer: "Teams can consist of 1-3 members. You can form a team before the event or find teammates during our team formation session at the beginning of the hackathon. We encourage diverse teams with complementary skills."
   },
   {
     question: "Is there a registration fee?",

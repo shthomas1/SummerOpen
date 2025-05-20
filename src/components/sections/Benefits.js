@@ -9,7 +9,7 @@ const Benefits = () => {
       <div className="container">
         <SectionHeader 
           title="Why Participate?" 
-          subtitle="Discover the many benefits of joining our Summer Open Hackathon."
+          subtitle="Discover the many benefits of joining the Summer Open Hackathon."
         />
         
         <div className="benefits-grid">

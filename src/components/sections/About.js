@@ -143,7 +143,7 @@ const About = () => {
               </AboutPoint>
             </AboutPoints>
             
-            <Button href="#register" variant="primary">Join the Challenge</Button>
+            <Button href="register" variant="primary">Join the Challenge</Button>
           </AboutText>
           
           <AboutImage
