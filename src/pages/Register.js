@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom"; // Import for navigation
 import "../styles/pages/Register.css";
 import { FaGithub } from "react-icons/fa";
 
 const Register = () => {
+  const navigate = useNavigate(); // Hook for navigation
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -26,6 +28,68 @@ const Register = () => {
   const githubClientId = process.env.REACT_APP_GITHUB_CLIENT_ID;
   const redirectUri =
     process.env.REACT_APP_REDIRECT_URI || `${window.location.origin}/register`;
+
+  // Define fetchGitHubUserData first to avoid circular dependencies
+  const fetchGitHubUserData = async (token) => {
+    try {
+      const response = await fetch("https://api.github.com/user", {
+        headers: { Authorization: `token ${token}` },
+      });
+
+      const userData = await response.json();
+
+      let email = userData.email;
+      if (!email) {
+        const emailResponse = await fetch(
+          "https://api.github.com/user/emails",
+          {
+            headers: { Authorization: `token ${token}` },
+          }
+        );
+
+        const emails = await emailResponse.json();
+        const primaryEmail = emails.find((e) => e.primary) || emails[0];
+        if (primaryEmail) {
+          email = primaryEmail.email;
+        }
+      }
+
+      setFormData((prev) => ({
+        ...prev,
+        name: userData.name || userData.login,
+        email: email || "",
+        githubUsername: userData.login,
+      }));
+
+      setIsAuthenticated(true);
+    } catch (error) {
+      console.error("Error fetching user data:", error);
+    }
+    setLoading(false);
+  };
+
+  // Then define exchangeCodeForToken
+  const exchangeCodeForToken = async (code) => {
+    setLoading(true);
+    try {
+      const response = await fetch("/api/github-auth", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ code }),
+      });
+
+      const data = await response.json();
+
+      if (data.access_token) {
+        await fetchGitHubUserData(data.access_token);
+      } else {
+        setLoading(false);
+      }
+    } catch (error) {
+      console.error("Error exchanging code for token:", error);
+      setLoading(false);
+    }
+  };
 
   const githubAuthUrl = `https://github.com/login/oauth/authorize?client_id=${githubClientId}&redirect_uri=${encodeURIComponent(
     redirectUri
@@ -64,6 +128,18 @@ const Register = () => {
         "Develop solutions addressing environmental challenges and promoting sustainability",
     },
   ];
+
+  /* eslint-disable react-hooks/exhaustive-deps */
+  useEffect(() => {
+    // Check if there's a code parameter in the URL (GitHub OAuth callback)
+    const urlParams = new URLSearchParams(window.location.search);
+    const code = urlParams.get("code");
+
+    if (code && !isAuthenticated) {
+      exchangeCodeForToken(code);
+    }
+  }, [isAuthenticated]); 
+  /* eslint-enable react-hooks/exhaustive-deps */
 
   const handleGitHubLogin = () => {
     window.location.href = githubAuthUrl;
@@ -104,78 +180,22 @@ const Register = () => {
 
     // Form submission logic would go here
     console.log("Form submitted:", formData);
-    alert("Registration successful! Check your email for confirmation.");
-  };
-
-  // Define functions without circular dependencies
-  const fetchGitHubUserData = async (token) => {
+    
+    // Store registration data if needed
     try {
-      const response = await fetch("https://api.github.com/user", {
-        headers: { Authorization: `token ${token}` },
-      });
-
-      const userData = await response.json();
-
-      let email = userData.email;
-      if (!email) {
-        const emailResponse = await fetch(
-          "https://api.github.com/user/emails",
-          {
-            headers: { Authorization: `token ${token}` },
-          }
-        );
-
-        const emails = await emailResponse.json();
-        const primaryEmail = emails.find((e) => e.primary) || emails[0];
-        if (primaryEmail) {
-          email = primaryEmail.email;
-        }
-      }
-
-      setFormData((prev) => ({
-        ...prev,
-        name: userData.name || userData.login,
-        email: email || "",
-        githubUsername: userData.login,
+      // You could save to localStorage if you want to access it on the thank you page
+      localStorage.setItem('registeredUser', JSON.stringify({
+        name: formData.name,
+        githubUsername: formData.githubUsername,
+        email: formData.email
       }));
-
-      setIsAuthenticated(true);
-    } catch (error) {
-      console.error("Error fetching user data:", error);
+    } catch (e) {
+      console.error("Error saving to localStorage", e);
     }
-    setLoading(false);
+
+    // Redirect to thank you page using React Router
+    navigate('/thank-you');
   };
-
-  const exchangeCodeForToken = async (code) => {
-    setLoading(true);
-    try {
-      const response = await fetch("/api/github-auth", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ code }),
-      });
-
-      const data = await response.json();
-
-      if (data.access_token) {
-        await fetchGitHubUserData(data.access_token);
-      }
-    } catch (error) {
-      console.error("Error exchanging code for token:", error);
-      setLoading(false);
-    }
-  };
-
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(() => {
-    // Check if there's a code parameter in the URL (GitHub OAuth callback)
-    const urlParams = new URLSearchParams(window.location.search);
-    const code = urlParams.get("code");
-
-    if (code && !isAuthenticated) {
-      exchangeCodeForToken(code);
-    }
-  }, [isAuthenticated]);
 
   if (!isAuthenticated) {
     return (
