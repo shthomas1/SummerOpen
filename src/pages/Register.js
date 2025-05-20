@@ -138,11 +138,19 @@ const Register = () => {
     if (code && !isAuthenticated) {
       exchangeCodeForToken(code);
     }
-  }, [isAuthenticated]); 
+  }, [isAuthenticated]);
   /* eslint-enable react-hooks/exhaustive-deps */
 
   const handleGitHubLogin = () => {
-    window.location.href = githubAuthUrl;
+    // Hard-code the values for now to make sure it works
+    const clientId = "Iv23liHEM7yRF3c47s2O"; // Your actual client ID
+    const callbackUrl = "https://summeropen.netlify.app/register";
+
+    const authUrl = `https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${encodeURIComponent(
+      callbackUrl
+    )}&scope=user:email`;
+
+    window.location.href = authUrl;
   };
 
   const handleChange = (e) => {
@@ -180,21 +188,24 @@ const Register = () => {
 
     // Form submission logic would go here
     console.log("Form submitted:", formData);
-    
+
     // Store registration data if needed
     try {
       // You could save to localStorage if you want to access it on the thank you page
-      localStorage.setItem('registeredUser', JSON.stringify({
-        name: formData.name,
-        githubUsername: formData.githubUsername,
-        email: formData.email
-      }));
+      localStorage.setItem(
+        "registeredUser",
+        JSON.stringify({
+          name: formData.name,
+          githubUsername: formData.githubUsername,
+          email: formData.email,
+        })
+      );
     } catch (e) {
       console.error("Error saving to localStorage", e);
     }
 
     // Redirect to thank you page using React Router
-    navigate('/thank-you');
+    navigate("/thank-you");
   };
 
   if (!isAuthenticated) {
