@@ -1,10 +1,17 @@
-import React from 'react';
-import Button from '../ui/Button';
-import '../../styles/sections/Hero.css';
+import React from "react";
+import Button from "../ui/Button";
+import "../../styles/sections/Hero.css";
 
 const Hero = () => {
   return (
     <section className="hero">
+      {/* Summer-themed elements */}
+      <div className="hero-pattern"></div>
+      <div className="sun-element"></div>
+      <div className="beach-ball"></div>
+      <div className="beach-ball"></div>
+      <div className="beach-ball"></div>
+
       <div className="container">
         <div className="hero-content">
           <h1 className="hero-title">
@@ -23,7 +30,7 @@ const Hero = () => {
 
           <div className="hero-stats">
             <div className="hero-stat">
-              <span className="hero-stat-number">500+</span>
+              <span className="hero-stat-number">40+</span>
               <span className="hero-stat-label">Participants</span>
             </div>
             <div className="hero-stat">
@@ -31,34 +38,58 @@ const Hero = () => {
               <span className="hero-stat-label">Hours</span>
             </div>
             <div className="hero-stat">
-              <span className="hero-stat-number">20+</span>
+              <span className="hero-stat-number">5</span>
               <span className="hero-stat-label">Mentors</span>
             </div>
           </div>
         </div>
         <div className="code-elements">
-          <span className="code-line" style={{ top: "15%", left: "5%", animationDuration: "15s" }}>
+          <span
+            className="code-line"
+            style={{ top: "15%", left: "5%", animationDuration: "15s" }}
+          >
             {"function createInnovation() {"}
           </span>
-          <span className="code-line" style={{ top: "25%", left: "15%", animationDuration: "18s" }}>
+          <span
+            className="code-line"
+            style={{ top: "25%", left: "15%", animationDuration: "18s" }}
+          >
             {"const ideas = [];"}
           </span>
-          <span className="code-line" style={{ top: "35%", left: "8%", animationDuration: "12s" }}>
+          <span
+            className="code-line"
+            style={{ top: "35%", left: "8%", animationDuration: "12s" }}
+          >
             {"const creativity = new Creativity();"}
           </span>
-          <span className="code-line" style={{ top: "45%", left: "20%", animationDuration: "20s" }}>
+          <span
+            className="code-line"
+            style={{ top: "45%", left: "20%", animationDuration: "20s" }}
+          >
             {"return ideas.map(idea => creativity.apply(idea));"}
           </span>
-          <span className="code-line" style={{ top: "55%", left: "12%", animationDuration: "16s" }}>
+          <span
+            className="code-line"
+            style={{ top: "55%", left: "12%", animationDuration: "16s" }}
+          >
             {"}"}
           </span>
-          <span className="code-line" style={{ top: "65%", left: "25%", animationDuration: "14s" }}>
+          <span
+            className="code-line"
+            style={{ top: "65%", left: "25%", animationDuration: "14s" }}
+          >
             {"const hackathon = new SummerHackathon();"}
           </span>
-          <span className="code-line" style={{ top: "75%", left: "10%", animationDuration: "17s" }}>
+          <span
+            className="code-line"
+            style={{ top: "75%", left: "10%", animationDuration: "17s" }}
+          >
             {"hackathon.start();"}
           </span>
-          <span className="code-line" style={{ top: "85%", left: "18%", animationDuration: "19s" }}>
+          <span
+            className="code-line"
+            style={{ top: "85%", left: "18%", animationDuration: "19s" }}
+          >
             {"// Join us and code the future!"}
           </span>
         </div>
