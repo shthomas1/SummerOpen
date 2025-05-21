@@ -126,7 +126,7 @@ const Login = () => {
                   // Reset error and try again
                   setError("");
                   
-                  const clientId = "Iv23liHEM7yRF3c47s2O";
+                  const clientId = "Ov23liirEqIDwwnIsirA";
                   const callbackUrl = "https://summeropen.netlify.app/login";
                   
                   const authUrl = `https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${encodeURIComponent(
