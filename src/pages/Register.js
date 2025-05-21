@@ -531,10 +531,6 @@ const Register = () => {
                   onChange={handleChange}
                   required
                 />
-                <label className="checkbox-label" htmlFor="agreeTerms">
-                  I agree to the Terms of Service and have read the Privacy
-                  Policy
-                </label>
               </div>
             </div>
 
