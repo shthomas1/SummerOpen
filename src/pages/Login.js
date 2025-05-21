@@ -149,7 +149,7 @@ const Login = () => {
                 className="github-button"
                 onClick={() => {
                   const clientId = "Ov23liirEqIDwwnIsirA";
-                  const callbackUrl = "https://summeropen.netlify.app/login";
+                  const callbackUrl = "https://summeropen.netlify.app/register";
                   
                   const authUrl = `https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${encodeURIComponent(
                     callbackUrl
