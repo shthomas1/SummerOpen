@@ -86,16 +86,6 @@ const ThankYou = () => {
             </div>
           </div>
           
-          <div className="email-confirmation">
-            <h2>Check Your Email</h2>
-            {userData.email ? (
-              <p>We've sent a confirmation email to <strong>{userData.email}</strong> with additional details and resources to help you prepare for the hackathon.</p>
-            ) : (
-              <p>We've sent a confirmation email with additional details and resources to help you prepare for the hackathon.</p>
-            )}
-            <p className="email-note">If you don't see the email, please check your spam folder.</p>
-          </div>
-          
           <div className="thank-you-actions">
             <Link to="/" className="home-button">Return to Homepage</Link>
           </div>

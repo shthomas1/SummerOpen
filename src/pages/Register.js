@@ -9,7 +9,6 @@ const Register = () => {
     name: "",
     email: "",
     experience: "beginner",
-    interests: "",
     agreeTerms: false,
     githubUsername: "",
     categories: {
@@ -213,9 +212,9 @@ const Register = () => {
         name: formData.name,
         email: formData.email,
         phone: "", // Not collected in this form
-        teamName: formData.githubUsername, // Using GitHub username as team name
+        teamName: "", // Also not collected
         experience: formData.experience,
-        expectations: `Interests: ${formData.interests || 'Not specified'}. Selected categories: ${selectedCategories}`
+        expectations: `Selected categories: ${selectedCategories}`
       };
 
       console.log("Sending to API:", apiData);
