@@ -171,8 +171,8 @@ const Register = () => {
   const [submitSuccess, setSubmitSuccess] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
-  // Replace with your actual Heroku API URL
-  const API_URL = 'https://your-heroku-app-name.herokuapp.com/api/Registrations';
+  // Your Heroku API URL
+  const API_URL = 'https://summeropenreg.herokuapp.com/api/Registrations';
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -182,12 +182,19 @@ const Register = () => {
     }));
   };
 
+  const handleRegisterClick = (e) => {
+    e.preventDefault();
+    setShowForm(true);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
     setErrorMessage('');
     
     try {
+      console.log('Submitting form data:', formData);
+      
       const response = await fetch(API_URL, {
         method: 'POST',
         headers: {
@@ -196,19 +203,31 @@ const Register = () => {
         body: JSON.stringify(formData)
       });
 
+      console.log('Response status:', response.status);
+      
       if (response.ok) {
         setSubmitSuccess(true);
         setShowForm(false);
       } else {
-        const errorData = await response.json();
-        if (response.status === 409) {
-          setErrorMessage('This email is already registered.');
-        } else {
-          setErrorMessage(errorData.message || 'Failed to register. Please try again.');
+        let errorText = 'Failed to register. Please try again.';
+        
+        try {
+          const errorData = await response.json();
+          console.log('Error response:', errorData);
+          
+          if (response.status === 409) {
+            errorText = 'This email is already registered.';
+          } else if (errorData.message) {
+            errorText = errorData.message;
+          }
+        } catch (jsonError) {
+          console.error('Error parsing error response:', jsonError);
         }
+        
+        setErrorMessage(errorText);
       }
     } catch (error) {
-      console.error('Error submitting form:', error);
+      console.error('Network error:', error);
       setErrorMessage('Network error. Please check your connection and try again.');
     } finally {
       setIsSubmitting(false);
@@ -244,10 +263,7 @@ const Register = () => {
               transition={{ duration: 0.5, delay: 0.4 }}
             >
               <RegisterCTA 
-                onClick={(e) => {
-                  e.preventDefault();
-                  setShowForm(true);
-                }} 
+                onClick={handleRegisterClick} 
                 light
               >
                 Register Now
