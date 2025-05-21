@@ -227,22 +227,22 @@ const Register = () => {
         body: JSON.stringify(apiData)
       });
 
+      // Check if the response is JSON first
+      const contentType = response.headers.get("content-type");
+      let errorData;
+      if (contentType && contentType.indexOf("application/json") !== -1) {
+        errorData = await response.json();
+      }
+
       if (!response.ok) {
-        // Try to get more details about the error
-        let errorMessage = "Registration failed";
-        try {
-          const errorData = await response.json();
-          errorMessage = errorData.message || errorData.title || `Error: ${response.status}`;
-          
-          // Handle specific error cases
-          if (response.status === 409) {
-            errorMessage = "This email address is already registered";
-          }
-        } catch (jsonError) {
-          console.error("Error parsing error response:", jsonError);
+        // Handle specific error cases with more user-friendly messages
+        if (response.status === 409) {
+          throw new Error("This email address is already registered. Please use a different email or contact support if you need help.");
+        } else if (errorData && (errorData.message || errorData.title)) {
+          throw new Error(errorData.message || errorData.title);
+        } else {
+          throw new Error(`Registration failed (Error ${response.status}). Please try again.`);
         }
-        
-        throw new Error(errorMessage);
       }
 
       // API call succeeded, now store in localStorage
@@ -320,8 +320,16 @@ const Register = () => {
           <form className="register-form" onSubmit={handleSubmit}>
             {/* Display error message if there is one */}
             {submitError && (
-              <div className="error-message">
-                {submitError}
+              <div className="error-message" style={{
+                backgroundColor: "rgba(255, 0, 0, 0.1)",
+                color: "#ff3333",
+                padding: "12px",
+                borderRadius: "5px",
+                marginBottom: "20px",
+                borderLeft: "4px solid #ff3333",
+                fontSize: "0.95rem"
+              }}>
+                <strong>Error:</strong> {submitError}
               </div>
             )}
             
