@@ -4,6 +4,8 @@ import { ThemeProvider } from "styled-components";
 import "./styles/globals.css";
 import theme from "./styles/Theme";
 import ThankYou from './pages/ThankYou';
+import UpdateProfile from './pages/UpdateProfile'; // Adjust path if it's not in 'pages'
+
 
 // Layout components
 import Header from "./components/layout/Header";
