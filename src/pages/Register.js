@@ -23,6 +23,7 @@ const Register = () => {
 
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [submitError, setSubmitError] = useState(""); // Add state for error message
 
   // GitHub OAuth Configuration
   const githubClientId = process.env.REACT_APP_GITHUB_CLIENT_ID;
@@ -173,8 +174,13 @@ const Register = () => {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    // Clear any previous errors
+    setSubmitError("");
+    // Set loading state
+    setLoading(true);
 
     // Validate that at least one category is selected
     const hasCategory = Object.values(formData.categories).some(
@@ -182,30 +188,85 @@ const Register = () => {
     );
 
     if (!hasCategory) {
-      alert("Please select at least one category you're interested in.");
+      setSubmitError("Please select at least one category you're interested in.");
+      setLoading(false);
       return;
     }
 
-    // Form submission logic would go here
-    console.log("Form submitted:", formData);
-
-    // Store registration data if needed
     try {
-      // You could save to localStorage if you want to access it on the thank you page
+      console.log("Form submitted:", formData);
+      
+      // Send data to Azure API
+      const apiUrl = 'https://summeropenreg-esbcg8bgekgrabfu.canadacentral-01.azurewebsites.net/api/Registrations';
+      
+      // Convert the categories object to a string for storage
+      const selectedCategories = Object.keys(formData.categories)
+        .filter(key => formData.categories[key])
+        .map(key => {
+          const category = categories.find(cat => cat.id === key);
+          return category ? category.name : key;
+        })
+        .join(", ");
+      
+      // Format data for the API
+      const apiData = {
+        name: formData.name,
+        email: formData.email,
+        phone: "", // Not collected in this form
+        teamName: formData.githubUsername, // Using GitHub username as team name
+        experience: formData.experience,
+        expectations: `Interests: ${formData.interests || 'Not specified'}. Selected categories: ${selectedCategories}`
+      };
+
+      console.log("Sending to API:", apiData);
+      
+      const response = await fetch(apiUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(apiData)
+      });
+
+      if (!response.ok) {
+        // Try to get more details about the error
+        let errorMessage = "Registration failed";
+        try {
+          const errorData = await response.json();
+          errorMessage = errorData.message || errorData.title || `Error: ${response.status}`;
+          
+          // Handle specific error cases
+          if (response.status === 409) {
+            errorMessage = "This email address is already registered";
+          }
+        } catch (jsonError) {
+          console.error("Error parsing error response:", jsonError);
+        }
+        
+        throw new Error(errorMessage);
+      }
+
+      // API call succeeded, now store in localStorage
       localStorage.setItem(
         "registeredUser",
         JSON.stringify({
           name: formData.name,
           githubUsername: formData.githubUsername,
           email: formData.email,
+          categories: selectedCategories,
+          registrationDate: new Date().toISOString()
         })
       );
-    } catch (e) {
-      console.error("Error saving to localStorage", e);
-    }
 
-    // Redirect to thank you page using React Router
-    navigate("/thank-you");
+      // Redirect to thank you page
+      navigate("/thank-you");
+    } catch (error) {
+      console.error("Registration error:", error);
+      // Show error message to user
+      setSubmitError(error.message || "There was an error submitting your registration. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   if (!isAuthenticated) {
@@ -258,6 +319,13 @@ const Register = () => {
           </div>
 
           <form className="register-form" onSubmit={handleSubmit}>
+            {/* Display error message if there is one */}
+            {submitError && (
+              <div className="error-message">
+                {submitError}
+              </div>
+            )}
+            
             <div className="form-group">
               <label className="form-label" htmlFor="name">
                 Your Name
@@ -352,8 +420,12 @@ const Register = () => {
             </div>
 
             <div className="submit-group">
-              <button className="submit-button" type="submit">
-                Complete Registration
+              <button 
+                className="submit-button" 
+                type="submit"
+                disabled={loading}
+              >
+                {loading ? "Processing..." : "Complete Registration"}
               </button>
             </div>
           </form>
