@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
 import Button from '../ui/Button';
@@ -8,6 +8,7 @@ const RegisterSection = styled.section`
   color: white;
   position: relative;
   overflow: hidden;
+  padding: 4rem 0;
   
   &::before {
     content: '';
@@ -73,7 +74,147 @@ const RegisterCTA = styled(Button)`
   }
 `;
 
+// New styled components for the form
+const RegisterForm = styled(motion.form)`
+  background: rgba(255, 255, 255, 0.1);
+  padding: 2rem;
+  border-radius: 10px;
+  backdrop-filter: blur(5px);
+  margin-top: 2rem;
+  text-align: left;
+`;
+
+const FormGroup = styled.div`
+  margin-bottom: 1.5rem;
+`;
+
+const Label = styled.label`
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+`;
+
+const Input = styled.input`
+  width: 100%;
+  padding: 0.8rem;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  font-size: 1rem;
+  
+  &::placeholder {
+    color: rgba(255, 255, 255, 0.7);
+  }
+  
+  &:focus {
+    outline: none;
+    border-color: white;
+  }
+`;
+
+const TextArea = styled.textarea`
+  width: 100%;
+  padding: 0.8rem;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  font-size: 1rem;
+  min-height: 100px;
+  
+  &::placeholder {
+    color: rgba(255, 255, 255, 0.7);
+  }
+  
+  &:focus {
+    outline: none;
+    border-color: white;
+  }
+`;
+
+const SubmitButton = styled(Button)`
+  width: 100%;
+  margin-top: 1rem;
+`;
+
+const ThankYouMessage = styled(motion.div)`
+  background: rgba(255, 255, 255, 0.2);
+  padding: 2rem;
+  border-radius: 10px;
+  backdrop-filter: blur(5px);
+  margin-top: 2rem;
+  text-align: center;
+`;
+
+const ErrorMessage = styled.div`
+  color: #ff6b6b;
+  background: rgba(255, 0, 0, 0.1);
+  padding: 0.75rem;
+  border-radius: 5px;
+  margin-bottom: 1rem;
+  text-align: center;
+`;
+
 const Register = () => {
+  // State for form visibility and data
+  const [showForm, setShowForm] = useState(false);
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    teamName: '',
+    experience: '',
+    expectations: ''
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitSuccess, setSubmitSuccess] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+
+  // Replace with your actual Heroku API URL
+  const API_URL = 'https://your-heroku-app-name.herokuapp.com/api/Registrations';
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prevData => ({
+      ...prevData,
+      [name]: value
+    }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    setErrorMessage('');
+    
+    try {
+      const response = await fetch(API_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(formData)
+      });
+
+      if (response.ok) {
+        setSubmitSuccess(true);
+        setShowForm(false);
+      } else {
+        const errorData = await response.json();
+        if (response.status === 409) {
+          setErrorMessage('This email is already registered.');
+        } else {
+          setErrorMessage(errorData.message || 'Failed to register. Please try again.');
+        }
+      }
+    } catch (error) {
+      console.error('Error submitting form:', error);
+      setErrorMessage('Network error. Please check your connection and try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <RegisterSection id="register">
       <div className="container">
@@ -94,14 +235,123 @@ const Register = () => {
           >
             Registration is open to everyone. Secure your spot now and prepare for an exciting weekend of innovation and collaboration!
           </RegisterDescription>
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: 0.4 }}
-          >
-            <RegisterCTA href="#" light>Register Now</RegisterCTA>
-          </motion.div>
+          
+          {!showForm && !submitSuccess && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.4 }}
+            >
+              <RegisterCTA 
+                onClick={(e) => {
+                  e.preventDefault();
+                  setShowForm(true);
+                }} 
+                light
+              >
+                Register Now
+              </RegisterCTA>
+            </motion.div>
+          )}
+          
+          {showForm && (
+            <RegisterForm
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              onSubmit={handleSubmit}
+            >
+              {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
+              
+              <FormGroup>
+                <Label htmlFor="name">Full Name *</Label>
+                <Input
+                  type="text"
+                  id="name"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleInputChange}
+                  placeholder="Enter your full name"
+                  required
+                />
+              </FormGroup>
+              
+              <FormGroup>
+                <Label htmlFor="email">Email Address *</Label>
+                <Input
+                  type="email"
+                  id="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleInputChange}
+                  placeholder="Enter your email address"
+                  required
+                />
+              </FormGroup>
+              
+              <FormGroup>
+                <Label htmlFor="phone">Phone Number</Label>
+                <Input
+                  type="tel"
+                  id="phone"
+                  name="phone"
+                  value={formData.phone}
+                  onChange={handleInputChange}
+                  placeholder="Enter your phone number"
+                />
+              </FormGroup>
+              
+              <FormGroup>
+                <Label htmlFor="teamName">Team Name (optional)</Label>
+                <Input
+                  type="text"
+                  id="teamName"
+                  name="teamName"
+                  value={formData.teamName}
+                  onChange={handleInputChange}
+                  placeholder="If you have a team already, enter the name"
+                />
+              </FormGroup>
+              
+              <FormGroup>
+                <Label htmlFor="experience">Your Experience (optional)</Label>
+                <TextArea
+                  id="experience"
+                  name="experience"
+                  value={formData.experience}
+                  onChange={handleInputChange}
+                  placeholder="Tell us about your relevant experience"
+                />
+              </FormGroup>
+              
+              <FormGroup>
+                <Label htmlFor="expectations">Your Expectations (optional)</Label>
+                <TextArea
+                  id="expectations"
+                  name="expectations"
+                  value={formData.expectations}
+                  onChange={handleInputChange}
+                  placeholder="What do you hope to gain from this challenge?"
+                />
+              </FormGroup>
+              
+              <SubmitButton type="submit" disabled={isSubmitting} light>
+                {isSubmitting ? 'Submitting...' : 'Submit Registration'}
+              </SubmitButton>
+            </RegisterForm>
+          )}
+          
+          {submitSuccess && (
+            <ThankYouMessage
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+            >
+              <h3>Thank You for Registering!</h3>
+              <p>Your registration has been received. We'll be in touch with more details soon.</p>
+            </ThankYouMessage>
+          )}
         </RegisterContent>
       </div>
     </RegisterSection>
