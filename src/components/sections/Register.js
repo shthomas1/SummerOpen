@@ -171,8 +171,8 @@ const Register = () => {
   const [submitSuccess, setSubmitSuccess] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
-  // Your Heroku API URL
-  const API_URL = 'https://summeropenreg-esbcg8bgekgrabfu.canadacentral-01.azurewebsites.net/api/Registrations';;
+  // Your Azure API URL
+  const API_URL = 'https://summeropenreg-esbcg8bgekgrabfu.canadacentral-01.azurewebsites.net/api/Registrations';
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -185,6 +185,20 @@ const Register = () => {
   const handleRegisterClick = (e) => {
     e.preventDefault();
     setShowForm(true);
+  };
+
+  // Define the GitHub login function
+  const handleGitHubLogin = () => {
+    // Hard-code the values for now to make sure it works
+    const clientId = "Ov23liirEqIDwwnIsirA";
+    const callbackUrl = "https://summeropen.netlify.app/register";
+    const state = "registration"; // Normal registration flow
+
+    const authUrl = `https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${encodeURIComponent(
+      callbackUrl
+    )}&scope=user:email&state=${state}`;
+
+    window.location.href = authUrl;
   };
 
   const handleSubmit = async (e) => {
@@ -208,6 +222,16 @@ const Register = () => {
       if (response.ok) {
         setSubmitSuccess(true);
         setShowForm(false);
+
+        // Store registration data in localStorage
+        localStorage.setItem(
+          "registeredUser",
+          JSON.stringify({
+            name: formData.name,
+            email: formData.email,
+            registrationDate: new Date().toISOString()
+          })
+        );
       } else {
         let errorText = 'Failed to register. Please try again.';
 
@@ -233,6 +257,9 @@ const Register = () => {
       setIsSubmitting(false);
     }
   };
+
+  // Define the handleChange function (which was missing)
+  const handleChange = handleInputChange; // Alias for handleInputChange
 
   return (
     <RegisterSection id="register">
