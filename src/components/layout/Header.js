@@ -7,12 +7,9 @@ import '../../styles/layout/Header.css';
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [showLoginForm, setShowLoginForm] = useState(false);
-  const [loginEmail, setLoginEmail] = useState('');
-  const [loginError, setLoginError] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userData, setUserData] = useState(null);
+  const [loading, setLoading] = useState(false);
   
   const location = useLocation();
   const navigate = useNavigate();
@@ -54,61 +51,18 @@ const Header = () => {
     }
   };
   
-  const toggleLoginForm = () => {
-    setShowLoginForm(!showLoginForm);
-    setLoginError('');
-  };
-  
-  const handleLoginSubmit = async (e) => {
-    e.preventDefault();
-    setLoginError('');
-    setIsLoading(true);
+  const handleGitHubLogin = () => {
+    setLoading(true);
+    // Hard-code the values for now to make sure it works
+    const clientId = "Ov23liirEqIDwwnIsirA";
+    const callbackUrl = "https://summeropen.netlify.app/login"; // Using a different callback URL for login vs registration
     
-    try {
-      // Check if the email exists in our database
-      const apiUrl = 'https://summeropenreg-esbcg8bgekgrabfu.canadacentral-01.azurewebsites.net/api/Registrations';
-      
-      // First try to get all registrations and find the one with matching email
-      const response = await fetch(`${apiUrl}?email=${encodeURIComponent(loginEmail)}`);
-      
-      if (response.ok) {
-        const registrations = await response.json();
-        const matchingUser = Array.isArray(registrations) && registrations.find(
-          reg => reg.email.toLowerCase() === loginEmail.toLowerCase()
-        );
-        
-        if (matchingUser) {
-          // Email found - user is registered
-          // Store user data in localStorage
-          const userData = {
-            name: matchingUser.name,
-            email: matchingUser.email,
-            githubUsername: "",
-            registrationDate: matchingUser.registeredAt,
-            categories: matchingUser.expectations || ""
-          };
-          
-          localStorage.setItem('registeredUser', JSON.stringify(userData));
-          setIsLoggedIn(true);
-          setUserData(userData);
-          setShowLoginForm(false);
-          
-          // Redirect to dashboard or thank you page
-          navigate('/thank-you');
-        } else {
-          // Email not found
-          setLoginError("This email is not registered. Please register first.");
-        }
-      } else {
-        // API error
-        setLoginError("Unable to verify email. Please try again later.");
-      }
-    } catch (error) {
-      console.error("Login error:", error);
-      setLoginError("An error occurred. Please try again.");
-    } finally {
-      setIsLoading(false);
-    }
+    const authUrl = `https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${encodeURIComponent(
+      callbackUrl
+    )}&scope=user:email`;
+    
+    // Redirect to GitHub OAuth
+    window.location.href = authUrl;
   };
   
   const handleLogout = () => {
@@ -138,38 +92,6 @@ const Header = () => {
     }
   };
   
-  // Login form JSX
-  const loginFormJSX = (
-    <div className="login-overlay" onClick={toggleLoginForm}>
-      <div className="login-form-container" onClick={(e) => e.stopPropagation()}>
-        <h3>Login with Email</h3>
-        {loginError && <div className="login-error">{loginError}</div>}
-        <form onSubmit={handleLoginSubmit}>
-          <div className="login-form-group">
-            <label htmlFor="loginEmail">Email Address</label>
-            <input
-              type="email"
-              id="loginEmail"
-              value={loginEmail}
-              onChange={(e) => setLoginEmail(e.target.value)}
-              required
-            />
-          </div>
-          <button 
-            type="submit" 
-            className="login-button"
-            disabled={isLoading}
-          >
-            {isLoading ? "Checking..." : "Login"}
-          </button>
-        </form>
-        <p className="login-helper">
-          Not registered yet? <Link to="/register" onClick={toggleLoginForm}>Register here</Link>
-        </p>
-      </div>
-    </div>
-  );
-  
   return (
     <header className={`header ${isScrolled ? 'scrolled' : ''}`}>
       <div className="container">
@@ -193,18 +115,20 @@ const Header = () => {
             {getNavLink('faq', 'FAQ')}
             
             {isLoggedIn ? (
-              <>
-                <div className="user-profile">
-                  <span className="username">{userData?.name}</span>
-                  <button onClick={handleLogout} className="logout-button">
-                    Logout
-                  </button>
-                </div>
-              </>
+              <div className="user-profile">
+                <span className="username">{userData?.name}</span>
+                <button onClick={handleLogout} className="logout-button">
+                  Logout
+                </button>
+              </div>
             ) : (
               <>
-                <button onClick={toggleLoginForm} className="login-link">
-                  Login
+                <button 
+                  onClick={handleGitHubLogin} 
+                  className="login-link"
+                  disabled={loading}
+                >
+                  {loading ? 'Connecting...' : 'Login'}
                 </button>
                 <Link to="/register" className="nav-cta" onClick={() => isMenuOpen && toggleMenu()}>
                   Register Now
@@ -214,10 +138,6 @@ const Header = () => {
           </div>
         </div>
       </div>
-      
-      {/* Login Form Modal */}
-      {showLoginForm && loginFormJSX}
-      
     </header>
   );
 };
