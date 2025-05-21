@@ -172,7 +172,7 @@ const Register = () => {
   const [errorMessage, setErrorMessage] = useState('');
 
   // Your Heroku API URL
-  const API_URL = 'https://summeropenreg.herokuapp.com/api/Registrations';
+  const API_URL = 'https://summeropenreg-esbcg8bgekgrabfu.canadacentral-01.azurewebsites.net/api/Registrations';;
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -191,10 +191,10 @@ const Register = () => {
     e.preventDefault();
     setIsSubmitting(true);
     setErrorMessage('');
-    
+
     try {
       console.log('Submitting form data:', formData);
-      
+
       const response = await fetch(API_URL, {
         method: 'POST',
         headers: {
@@ -204,17 +204,17 @@ const Register = () => {
       });
 
       console.log('Response status:', response.status);
-      
+
       if (response.ok) {
         setSubmitSuccess(true);
         setShowForm(false);
       } else {
         let errorText = 'Failed to register. Please try again.';
-        
+
         try {
           const errorData = await response.json();
           console.log('Error response:', errorData);
-          
+
           if (response.status === 409) {
             errorText = 'This email is already registered.';
           } else if (errorData.message) {
@@ -223,7 +223,7 @@ const Register = () => {
         } catch (jsonError) {
           console.error('Error parsing error response:', jsonError);
         }
-        
+
         setErrorMessage(errorText);
       }
     } catch (error) {
@@ -254,7 +254,7 @@ const Register = () => {
           >
             Registration is open to everyone. Secure your spot now and prepare for an exciting weekend of innovation and collaboration!
           </RegisterDescription>
-          
+
           {!showForm && !submitSuccess && (
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -262,15 +262,15 @@ const Register = () => {
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: 0.4 }}
             >
-              <RegisterCTA 
-                onClick={handleRegisterClick} 
+              <RegisterCTA
+                onClick={handleRegisterClick}
                 light
               >
                 Register Now
               </RegisterCTA>
             </motion.div>
           )}
-          
+
           {showForm && (
             <RegisterForm
               initial={{ opacity: 0, y: 20 }}
@@ -279,7 +279,7 @@ const Register = () => {
               onSubmit={handleSubmit}
             >
               {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
-              
+
               <FormGroup>
                 <Label htmlFor="name">Full Name *</Label>
                 <Input
@@ -292,7 +292,7 @@ const Register = () => {
                   required
                 />
               </FormGroup>
-              
+
               <FormGroup>
                 <Label htmlFor="email">Email Address *</Label>
                 <Input
@@ -305,7 +305,7 @@ const Register = () => {
                   required
                 />
               </FormGroup>
-              
+
               <FormGroup>
                 <Label htmlFor="phone">Phone Number</Label>
                 <Input
@@ -317,7 +317,7 @@ const Register = () => {
                   placeholder="Enter your phone number"
                 />
               </FormGroup>
-              
+
               <FormGroup>
                 <Label htmlFor="teamName">Team Name (optional)</Label>
                 <Input
@@ -329,7 +329,7 @@ const Register = () => {
                   placeholder="If you have a team already, enter the name"
                 />
               </FormGroup>
-              
+
               <FormGroup>
                 <Label htmlFor="experience">Your Experience (optional)</Label>
                 <TextArea
@@ -340,7 +340,7 @@ const Register = () => {
                   placeholder="Tell us about your relevant experience"
                 />
               </FormGroup>
-              
+
               <FormGroup>
                 <Label htmlFor="expectations">Your Expectations (optional)</Label>
                 <TextArea
@@ -351,13 +351,13 @@ const Register = () => {
                   placeholder="What do you hope to gain from this challenge?"
                 />
               </FormGroup>
-              
+
               <SubmitButton type="submit" disabled={isSubmitting} light>
                 {isSubmitting ? 'Submitting...' : 'Submit Registration'}
               </SubmitButton>
             </RegisterForm>
           )}
-          
+
           {submitSuccess && (
             <ThankYouMessage
               initial={{ opacity: 0, y: 20 }}
