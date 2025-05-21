@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation, Link } from "react-router-dom"; // Added Link import
 import "../styles/pages/Login.css";
 import { FaGithub, FaSpinner } from "react-icons/fa";
 
@@ -93,7 +93,7 @@ const Login = () => {
           }));
           
           // Redirect to complete registration
-          navigate('/login');
+          navigate('/register'); // Changed from '/login' to '/register'
         }
       } else {
         throw new Error("Failed to check registration status");
@@ -128,10 +128,11 @@ const Login = () => {
                   
                   const clientId = "Ov23liirEqIDwwnIsirA";
                   const callbackUrl = "https://summeropen.netlify.app/register";
+                  const state = "login"; // Add state parameter to indicate login flow
                   
                   const authUrl = `https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${encodeURIComponent(
                     callbackUrl
-                  )}&scope=user:email`;
+                  )}&scope=user:email&state=${state}`;
                   
                   window.location.href = authUrl;
                 }}
@@ -150,10 +151,11 @@ const Login = () => {
                 onClick={() => {
                   const clientId = "Ov23liirEqIDwwnIsirA";
                   const callbackUrl = "https://summeropen.netlify.app/register";
+                  const state = "login"; // Add state parameter to indicate login flow
                   
                   const authUrl = `https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${encodeURIComponent(
                     callbackUrl
-                  )}&scope=user:email`;
+                  )}&scope=user:email&state=${state}`;
                   
                   window.location.href = authUrl;
                 }}

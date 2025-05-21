@@ -130,143 +130,124 @@ const Register = () => {
   ];
 
   /* eslint-disable react-hooks/exhaustive-deps */
-  useEffect(() => {
-    // Check if there's a code parameter in the URL (GitHub OAuth callback)
-    const urlParams = new URLSearchParams(window.location.search);
-    const code = urlParams.get("code");
+useEffect(() => {
+  // Check if there's a code parameter in the URL (GitHub OAuth callback)
+  const urlParams = new URLSearchParams(window.location.search);
+  const code = urlParams.get("code");
+  const state = urlParams.get("state");
 
-    if (code && !isAuthenticated) {
+  if (code && !isAuthenticated) {
+    if (state === "login") {
+      // This is a login attempt - handle differently
+      handleLoginFlow(code);
+    } else {
+      // Normal registration flow
       exchangeCodeForToken(code);
     }
-  }, [isAuthenticated]);
-  /* eslint-enable react-hooks/exhaustive-deps */
+  }
+}, [isAuthenticated]);
+/* eslint-enable react-hooks/exhaustive-deps */
 
-  const handleGitHubLogin = () => {
-    // Hard-code the values for now to make sure it works
-    const clientId = "Ov23liirEqIDwwnIsirA";
-    const callbackUrl = "https://summeropen.netlify.app/register";
+// Add this new function for login flow
+const handleLoginFlow = async (code) => {
+  setLoading(true);
+  try {
+    const response = await fetch("/api/github-auth", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ code }),
+    });
 
-    const authUrl = `https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${encodeURIComponent(
-      callbackUrl
-    )}&scope=user:email`;
+    const data = await response.json();
 
-    window.location.href = authUrl;
-  };
-
-  const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
-
-    if (name.startsWith("category-")) {
-      const categoryId = name.replace("category-", "");
-      setFormData((prev) => ({
-        ...prev,
-        categories: {
-          ...prev.categories,
-          [categoryId]: checked,
-        },
-      }));
-    } else {
-      setFormData((prev) => ({
-        ...prev,
-        [name]: type === "checkbox" ? checked : value,
-      }));
-    }
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    
-    // Clear any previous errors
-    setSubmitError("");
-    // Set loading state
-    setLoading(true);
-
-    // Validate that at least one category is selected
-    const hasCategory = Object.values(formData.categories).some(
-      (value) => value
-    );
-
-    if (!hasCategory) {
-      setSubmitError("Please select at least one category you're interested in.");
-      setLoading(false);
-      return;
-    }
-
-    try {
-      console.log("Form submitted:", formData);
-      
-      // Send data to Azure API
-      const apiUrl = 'https://summeropenreg-esbcg8bgekgrabfu.canadacentral-01.azurewebsites.net/api/Registrations';
-      
-      // Convert the categories object to a string for storage
-      const selectedCategories = Object.keys(formData.categories)
-        .filter(key => formData.categories[key])
-        .map(key => {
-          const category = categories.find(cat => cat.id === key);
-          return category ? category.name : key;
-        })
-        .join(", ");
-      
-      // Format data for the API
-      const apiData = {
-        name: formData.name,
-        email: formData.email,
-        phone: "", // Not collected in this form
-        teamName: "", // Also not collected
-        experience: formData.experience,
-        expectations: `Selected categories: ${selectedCategories}`
-      };
-
-      console.log("Sending to API:", apiData);
-      
-      const response = await fetch(apiUrl, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(apiData)
+    if (data.access_token) {
+      // Get user data from GitHub
+      const userResponse = await fetch("https://api.github.com/user", {
+        headers: { Authorization: `token ${data.access_token}` },
       });
-
-      // Check if the response is JSON first
-      const contentType = response.headers.get("content-type");
-      let errorData;
-      if (contentType && contentType.indexOf("application/json") !== -1) {
-        errorData = await response.json();
-      }
-
-      if (!response.ok) {
-        // Handle specific error cases with more user-friendly messages
-        if (response.status === 409) {
-          throw new Error("This email address is already registered. Please use a different email or contact support if you need help.");
-        } else if (errorData && (errorData.message || errorData.title)) {
-          throw new Error(errorData.message || errorData.title);
-        } else {
-          throw new Error(`Registration failed (Error ${response.status}). Please try again.`);
+      
+      const userData = await userResponse.json();
+      
+      // Get user email if not provided
+      let email = userData.email;
+      if (!email) {
+        const emailResponse = await fetch("https://api.github.com/user/emails", {
+          headers: { Authorization: `token ${data.access_token}` },
+        });
+        
+        const emails = await emailResponse.json();
+        const primaryEmail = emails.find((e) => e.primary) || emails[0];
+        if (primaryEmail) {
+          email = primaryEmail.email;
         }
       }
-
-      // API call succeeded, now store in localStorage
-      localStorage.setItem(
-        "registeredUser",
-        JSON.stringify({
-          name: formData.name,
-          githubUsername: formData.githubUsername,
-          email: formData.email,
-          categories: selectedCategories,
-          registrationDate: new Date().toISOString()
-        })
-      );
-
-      // Redirect to thank you page
-      navigate("/thank-you");
-    } catch (error) {
-      console.error("Registration error:", error);
-      // Show error message to user
-      setSubmitError(error.message || "There was an error submitting your registration. Please try again.");
-    } finally {
+      
+      // Check if the user exists in our database
+      const apiUrl = 'https://summeropenreg-esbcg8bgekgrabfu.canadacentral-01.azurewebsites.net/api/Registrations';
+      
+      try {
+        const checkResponse = await fetch(`${apiUrl}?email=${encodeURIComponent(email)}`);
+        
+        if (checkResponse.ok) {
+          const registrations = await checkResponse.json();
+          const existingUser = Array.isArray(registrations) && registrations.find(
+            reg => reg.email.toLowerCase() === email.toLowerCase()
+          );
+          
+          if (existingUser) {
+            // User found - they're already registered
+            localStorage.setItem('registeredUser', JSON.stringify({
+              name: existingUser.name,
+              email: existingUser.email,
+              githubUsername: userData.login,
+              registrationDate: existingUser.registeredAt
+            }));
+            
+            // Redirect to thank you/dashboard page
+            navigate('/thank-you');
+            return; // Exit early
+          } else {
+            // Not found - proceed with normal registration
+            setFormData((prev) => ({
+              ...prev,
+              name: userData.name || userData.login,
+              email: email || "",
+              githubUsername: userData.login,
+            }));
+            
+            setIsAuthenticated(true);
+          }
+        } else {
+          // API error, just proceed with normal registration
+          setFormData((prev) => ({
+            ...prev,
+            name: userData.name || userData.login,
+            email: email || "",
+            githubUsername: userData.login,
+          }));
+          
+          setIsAuthenticated(true);
+        }
+      } catch (error) {
+        console.error("Error checking for existing user:", error);
+        // If we can't check, just continue with normal registration
+        setFormData((prev) => ({
+          ...prev,
+          name: userData.name || userData.login,
+          email: email || "",
+          githubUsername: userData.login,
+        }));
+        
+        setIsAuthenticated(true);
+      }
+    } else {
       setLoading(false);
     }
-  };
+  } catch (error) {
+    console.error("Error in login flow:", error);
+    setLoading(false);
+  }
+};
 
   if (!isAuthenticated) {
     return (
