@@ -3,7 +3,7 @@ import '../../styles/ui/SectionHeader.css';
 
 const SectionHeader = ({ title, subtitle, light }) => {
   return (
-    <div className="section-header">
+    <div className="section-header container">
       <h2 className={`section-title ${light ? 'light' : ''}`}>
         {title}
       </h2>

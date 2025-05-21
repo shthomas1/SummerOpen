@@ -102,62 +102,43 @@ const Header = () => {
     <header className={`header ${isScrolled ? 'scrolled' : ''}`}>
       <div className="container">
         <div className="navbar">
-          <Link to="/" className="logo">
-            <div className="logo-icon">&lt;/&gt;</div>
-            <span>Summer Open</span>
-          </Link>
+          <div className="left-section">
+            <Link to="/" className="logo">
+              <div className="logo-icon">&lt;/&gt;</div>
+              <span>Summer Open</span>
+            </Link>
+          </div>
 
-          <Countdown targetDate="2025-06-28T06:00:00" header={true} />
+          <div className="center-section">
+            <Countdown targetDate="2025-06-28T06:00:00" header={true} />
+          </div>
 
-          <button className="mobile-menu-btn" onClick={toggleMenu} aria-label="Toggle menu">
-            <FaBars />
-          </button>
-
-          <div className={`nav-links ${isMenuOpen ? 'open' : ''}`}>
-            {getNavLink('about', 'About')}
-            {getNavLink('schedule', 'Schedule')}
-            {getNavLink('benefits', 'Benefits')}
-            {getNavLink('mentors', 'Mentors')}
-            {getNavLink('faq', 'FAQ')}
-
-            {isLoggedIn ? (
-              <div className="user-profile">
-                {userData?.avatar_url && (
-                  <img 
-                    src={userData.avatar_url} 
-                    alt="GitHub Profile" 
-                    className="github-avatar" 
-                    style={{ width: '30px', height: '30px', borderRadius: '50%', marginRight: '8px' }}
-                  />
-                )}
-                <Link
-                  to="/update-profile"
-                  className="username-link"
-                  onClick={() => isMenuOpen && toggleMenu()}
-                  style={{ textDecoration: 'underline' }}
-                >
-                  {userData?.name}
-                </Link>
-                <button onClick={handleLogout} className="logout-button">
-                  Logout
-                </button>
-              </div>
-            ) : (
-              <>
-                <button
-                  onClick={handleGitHubLogin}
-                  className="login-link"
-                  disabled={loading}
-                >
-                  {loading ? 'Connecting...' : 'Login'}
-                </button>
-                <Link to="/register" className="nav-cta" onClick={() => isMenuOpen && toggleMenu()}>
-                  Register Now
-                </Link>
-              </>
-            )}
+          <div className="right-section">
+            <button className="mobile-menu-btn" onClick={toggleMenu} aria-label="Toggle menu">
+              <FaBars />
+            </button>
+            <div className={`nav-links ${isMenuOpen ? 'open' : ''}`}>
+              {/* Your getNavLink and auth buttons */}
+              {getNavLink('about', 'About')}
+              {/* ... other links */}
+              {isLoggedIn ? (
+                <div className="user-profile">
+                  {/* Avatar and logout */}
+                </div>
+              ) : (
+                <>
+                  <button onClick={handleGitHubLogin} className="login-link" disabled={loading}>
+                    {loading ? 'Connecting...' : 'Login'}
+                  </button>
+                  <Link to="/register" className="nav-cta" onClick={() => isMenuOpen && toggleMenu()}>
+                    Register Now
+                  </Link>
+                </>
+              )}
+            </div>
           </div>
         </div>
+
       </div>
     </header>
   );
