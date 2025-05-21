@@ -93,7 +93,7 @@ const Login = () => {
           }));
           
           // Redirect to complete registration
-          navigate('/register');
+          navigate('/login');
         }
       } else {
         throw new Error("Failed to check registration status");
