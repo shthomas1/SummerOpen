@@ -10,12 +10,11 @@ const Header = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(false);
-  
+
   const location = useLocation();
   const navigate = useNavigate();
   const isHomePage = location.pathname === '/';
-  
-  // Check if user is already logged in from localStorage
+
   useEffect(() => {
     const checkLoginStatus = () => {
       const storedUser = localStorage.getItem('registeredUser');
@@ -33,21 +32,16 @@ const Header = () => {
       }
     };
 
-    // Check immediately on component mount
     checkLoginStatus();
-
-    // Add event listener for storage changes
     window.addEventListener('storage', checkLoginStatus);
-
-    // Set up interval to check regularly (in case of login in another tab)
     const intervalId = setInterval(checkLoginStatus, 5000);
 
     return () => {
       window.removeEventListener('storage', checkLoginStatus);
       clearInterval(intervalId);
     };
-  }, [location]); // Re-run when location changes (e.g., redirects)
-  
+  }, [location]);
+
   useEffect(() => {
     const handleScroll = () => {
       if (window.scrollY > 50) {
@@ -56,11 +50,11 @@ const Header = () => {
         setIsScrolled(false);
       }
     };
-    
+
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
-  
+
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
     if (isMenuOpen) {
@@ -69,43 +63,33 @@ const Header = () => {
       document.body.style.overflow = 'hidden';
     }
   };
-  
+
   const handleGitHubLogin = () => {
     setLoading(true);
-    // Hard-code the values for now to make sure it works
     const clientId = "Ov23liirEqIDwwnIsirA";
     const callbackUrl = "https://summeropen.netlify.app/register";
-    
-    // Add a state parameter to indicate login flow
     const state = "login";
-    
     const authUrl = `https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${encodeURIComponent(
       callbackUrl
     )}&scope=user:email&state=${state}`;
-    
-    // Redirect to GitHub OAuth
     window.location.href = authUrl;
   };
-  
+
   const handleLogout = () => {
     localStorage.removeItem('registeredUser');
     setIsLoggedIn(false);
     setUserData(null);
-    // Redirect to home page
     navigate('/');
   };
-  
-  // Function to create navigation links based on current page
+
   const getNavLink = (sectionId, label) => {
     if (isHomePage) {
-      // If we're already on the home page, use hash links
       return (
         <a href={`#${sectionId}`} className="nav-link" onClick={() => isMenuOpen && toggleMenu()}>
           {label}
         </a>
       );
     } else {
-      // If we're on another page, navigate to home page with hash
       return (
         <Link to={`/#${sectionId}`} className="nav-link" onClick={() => isMenuOpen && toggleMenu()}>
           {label}
@@ -113,7 +97,7 @@ const Header = () => {
       );
     }
   };
-  
+
   return (
     <header className={`header ${isScrolled ? 'scrolled' : ''}`}>
       <div className="container">
@@ -122,31 +106,39 @@ const Header = () => {
             <div className="logo-icon">&lt;/&gt;</div>
             <span>Summer Open</span>
           </Link>
-          
+
           <Countdown targetDate="2025-06-28T06:00:00" header={true} />
-          
+
           <button className="mobile-menu-btn" onClick={toggleMenu} aria-label="Toggle menu">
             <FaBars />
           </button>
-          
+
           <div className={`nav-links ${isMenuOpen ? 'open' : ''}`}>
             {getNavLink('about', 'About')}
             {getNavLink('schedule', 'Schedule')}
             {getNavLink('benefits', 'Benefits')}
             {getNavLink('mentors', 'Mentors')}
             {getNavLink('faq', 'FAQ')}
-            
+
             {isLoggedIn ? (
               <div className="user-profile">
                 <span className="username">{userData?.name}</span>
+                <Link
+                  to="/update-profile"
+                  className="nav-link"
+                  onClick={() => isMenuOpen && toggleMenu()}
+                  style={{ marginLeft: '10px', textDecoration: 'underline', fontSize: '0.9rem' }}
+                >
+                  Update Profile
+                </Link>
                 <button onClick={handleLogout} className="logout-button">
                   Logout
                 </button>
               </div>
             ) : (
               <>
-                <button 
-                  onClick={handleGitHubLogin} 
+                <button
+                  onClick={handleGitHubLogin}
                   className="login-link"
                   disabled={loading}
                 >

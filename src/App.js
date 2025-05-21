@@ -45,6 +45,8 @@ function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/register" element={<Register />} />
           <Route path="/thank-you" element={<ThankYou />} />{" "}
+          <Route path="/update-profile" element={<UpdateProfile />} />
+
         </Routes>
         <Footer />
       </Router>
