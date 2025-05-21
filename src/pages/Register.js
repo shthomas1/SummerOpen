@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate, useLocation } from "react-router-dom"; // Added useLocation
+import { useNavigate, useLocation } from "react-router-dom";
 import "../styles/pages/Register.css";
 import { FaGithub } from "react-icons/fa";
 
 const Register = () => {
   const navigate = useNavigate();
-  const location = useLocation(); // Added for URL parameter access
+  const location = useLocation();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -24,6 +24,8 @@ const Register = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [loading, setLoading] = useState(false);
   const [submitError, setSubmitError] = useState("");
+  // Add state for GitHub user data including avatar URL
+  const [githubUserData, setGithubUserData] = useState(null);
 
   // GitHub OAuth Configuration
   const githubClientId = process.env.REACT_APP_GITHUB_CLIENT_ID;
@@ -38,6 +40,8 @@ const Register = () => {
       });
 
       const userData = await response.json();
+      // Store the full user data object for later use
+      setGithubUserData(userData);
 
       let email = userData.email;
       if (!email) {
@@ -166,44 +170,47 @@ const Register = () => {
         const userResponse = await fetch("https://api.github.com/user", {
           headers: { Authorization: `token ${data.access_token}` },
         });
-        
+
         const userData = await userResponse.json();
-        
+        // Store the full user data for later use
+        setGithubUserData(userData);
+
         // Get user email if not provided
         let email = userData.email;
         if (!email) {
           const emailResponse = await fetch("https://api.github.com/user/emails", {
             headers: { Authorization: `token ${data.access_token}` },
           });
-          
+
           const emails = await emailResponse.json();
           const primaryEmail = emails.find((e) => e.primary) || emails[0];
           if (primaryEmail) {
             email = primaryEmail.email;
           }
         }
-        
+
         // Check if the user exists in our database
         const apiUrl = 'https://summeropenreg-esbcg8bgekgrabfu.canadacentral-01.azurewebsites.net/api/Registrations';
-        
+
         try {
           const checkResponse = await fetch(`${apiUrl}?email=${encodeURIComponent(email)}`);
-          
+
           if (checkResponse.ok) {
             const registrations = await checkResponse.json();
             const existingUser = Array.isArray(registrations) && registrations.find(
               reg => reg.email.toLowerCase() === email.toLowerCase()
             );
-            
+
             if (existingUser) {
               // User found - they're already registered
               localStorage.setItem('registeredUser', JSON.stringify({
                 name: existingUser.name,
                 email: existingUser.email,
                 githubUsername: userData.login,
-                registrationDate: existingUser.registeredAt
+                registrationDate: existingUser.registeredAt,
+                avatar_url: userData.avatar_url // Now userData is defined in this scope
               }));
-              
+
               // Redirect to thank you/dashboard page
               navigate('/thank-you');
               return; // Exit early
@@ -215,7 +222,7 @@ const Register = () => {
                 email: email || "",
                 githubUsername: userData.login,
               }));
-              
+
               setIsAuthenticated(true);
             }
           } else {
@@ -226,7 +233,7 @@ const Register = () => {
               email: email || "",
               githubUsername: userData.login,
             }));
-            
+
             setIsAuthenticated(true);
           }
         } catch (error) {
@@ -238,7 +245,7 @@ const Register = () => {
             email: email || "",
             githubUsername: userData.login,
           }));
-          
+
           setIsAuthenticated(true);
         }
       } else {
@@ -255,11 +262,11 @@ const Register = () => {
     // Hard-code the values for now to make sure it works
     const clientId = "Ov23liirEqIDwwnIsirA";
     const callbackUrl = "https://summeropen.netlify.app/register";
-    
+
     const authUrl = `https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${encodeURIComponent(
       callbackUrl
-    )}&scope=user:email`;
-    
+    )}&scope=user:email&state=register`; // Added state parameter for clarity
+
     window.location.href = authUrl;
   };
 
@@ -287,7 +294,7 @@ const Register = () => {
   // Add the missing handleSubmit function
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     // Clear any previous errors
     setSubmitError("");
     // Set loading state
@@ -306,10 +313,10 @@ const Register = () => {
 
     try {
       console.log("Form submitted:", formData);
-      
+
       // Send data to Azure API
       const apiUrl = 'https://summeropenreg-esbcg8bgekgrabfu.canadacentral-01.azurewebsites.net/api/Registrations';
-      
+
       // Convert the categories object to a string for storage
       const selectedCategories = Object.keys(formData.categories)
         .filter(key => formData.categories[key])
@@ -318,7 +325,7 @@ const Register = () => {
           return category ? category.name : key;
         })
         .join(", ");
-      
+
       // Format data for the API
       const apiData = {
         name: formData.name,
@@ -330,7 +337,7 @@ const Register = () => {
       };
 
       console.log("Sending to API:", apiData);
-      
+
       const response = await fetch(apiUrl, {
         method: 'POST',
         headers: {
@@ -365,7 +372,8 @@ const Register = () => {
           githubUsername: formData.githubUsername,
           email: formData.email,
           categories: selectedCategories,
-          registrationDate: new Date().toISOString()
+          registrationDate: new Date().toISOString(),
+          avatar_url: githubUserData?.avatar_url || "" // Use the githubUserData state we added
         })
       );
 
@@ -444,7 +452,7 @@ const Register = () => {
                 <strong>Error:</strong> {submitError}
               </div>
             )}
-            
+
             <div className="form-group">
               <label className="form-label" htmlFor="name">
                 Your Name
@@ -531,14 +539,17 @@ const Register = () => {
                   onChange={handleChange}
                   required
                 />
+                <label htmlFor="agreeTerms">
+                  I agree to the hackathon rules and code of conduct
+                </label>
               </div>
             </div>
 
             <div className="submit-group">
-              <button 
-                className="submit-button" 
+              <button
+                className="submit-button"
                 type="submit"
-                disabled={loading}
+                disabled={loading || !formData.agreeTerms}
               >
                 {loading ? "Processing..." : "Complete Registration"}
               </button>

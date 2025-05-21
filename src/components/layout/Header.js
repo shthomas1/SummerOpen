@@ -122,14 +122,21 @@ const Header = () => {
 
             {isLoggedIn ? (
               <div className="user-profile">
-                <span className="username">{userData?.name}</span>
+                {userData?.avatar_url && (
+                  <img 
+                    src={userData.avatar_url} 
+                    alt="GitHub Profile" 
+                    className="github-avatar" 
+                    style={{ width: '30px', height: '30px', borderRadius: '50%', marginRight: '8px' }}
+                  />
+                )}
                 <Link
                   to="/update-profile"
-                  className="nav-link"
+                  className="username-link"
                   onClick={() => isMenuOpen && toggleMenu()}
-                  style={{ marginLeft: '10px', textDecoration: 'underline', fontSize: '0.9rem' }}
+                  style={{ textDecoration: 'underline' }}
                 >
-                  Update Profile
+                  {userData?.name}
                 </Link>
                 <button onClick={handleLogout} className="logout-button">
                   Logout
