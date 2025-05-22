@@ -9,7 +9,7 @@ const getSocialIcon = (platform) => {
     case 'linkedin':
       return <FaLinkedinIn />;
     case 'website':
-      return <FaGlobe />; // Changed from FaWebsite to FaGlobe
+      return <FaGlobe />;
     case 'github':
       return <FaGithub />;
     case 'dribbble':
@@ -25,16 +25,16 @@ const Mentors = () => {
   return (
     <section id="mentors" className="mentors-section">
       <div className="container">
-        <SectionHeader 
-          title="Meet Our Mentors" 
+        <SectionHeader
+          title="Meet Our Mentors"
           subtitle="Our experienced mentors will be available throughout the event to guide and support you."
         />
-        
+
         <div className="mentors-grid">
           {mentorsData.map((mentor, index) => (
             <div className="mentor-card" key={index}>
               <div className="mentor-image">
-                <img src={`/api/placeholder/300/300?text=${mentor.name}`} alt={mentor.name} />
+                <img src={mentor.image || `/api/placeholder/300/300?text=${mentor.name}`} alt={mentor.name} />
               </div>
               <div className="mentor-info">
                 <h3 className="mentor-name">{mentor.name}</h3>

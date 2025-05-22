@@ -1,6 +1,6 @@
 export const faqsData = [
   {
-    question: "Do I need to be an expert programmer to participate?",
+    question: "Do I need to be an experienced programmer to participate?",
     answer: "Not at all! Our hackathon welcomes participants of all skill levels. We have mentors available to help beginners, and you can learn a lot by collaborating with others. It's a perfect opportunity to enhance your skills regardless of your experience level."
   },
   {

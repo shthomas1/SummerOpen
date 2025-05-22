@@ -1,9 +1,7 @@
-import image from './images/S2.jpg';
-
 export const sponsorsData = [
   {
     name: "Signal Surge",
-    logo: image,
+    logo: "/images/S2.jpg",
     url: "https://seanhthomas.com"
   },
   {
