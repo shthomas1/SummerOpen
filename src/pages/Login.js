@@ -121,6 +121,10 @@ const Login = () => {
                     ) : error ? (
                         <div className="error-container">
                             <p className="error-message">{error}</p>
+                            // In your Login.js component
+                            // Fix the GitHub OAuth URL in three places:
+
+                            // 1. In the retry-button onClick handler:
                             <button
                                 className="retry-button"
                                 onClick={() => {
@@ -128,8 +132,8 @@ const Login = () => {
                                     setError("");
 
                                     const clientId = "Ov23liirEqIDwwnIsirA";
-                                    const callbackUrl = "https://summeropen2025.com/register";
-                                    const state = "login"; // Add state parameter to indicate login flow
+                                    const callbackUrl = "https://summeropen2025.com/register"; // Keep as /register
+                                    const state = "login"; // This state parameter indicates this is a login attempt
 
                                     const authUrl = `https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${encodeURIComponent(
                                         callbackUrl
@@ -139,6 +143,23 @@ const Login = () => {
                                 }}
                             >
                                 Try Again
+                            </button>
+                            <button
+                                className="github-button"
+                                onClick={() => {
+                                    const clientId = "Ov23liirEqIDwwnIsirA";
+                                    const callbackUrl = "https://summeropen2025.com/register"; // Keep as /register
+                                    const state = "login"; // This state parameter indicates this is a login attempt
+
+                                    const authUrl = `https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${encodeURIComponent(
+                                        callbackUrl
+                                    )}&scope=user:email&state=${state}`;
+
+                                    window.location.href = authUrl;
+                                }}
+                            >
+                                <FaGithub className="github-icon" />
+                                Sign in with GitHub
                             </button>
                             <Link to="/" className="back-link">
                                 Back to Home
@@ -151,8 +172,9 @@ const Login = () => {
                                 className="github-button"
                                 onClick={() => {
                                     const clientId = "Ov23liirEqIDwwnIsirA";
-                                    const callbackUrl = "https://summeropen2025.com/register";
-                                    const state = "login"; // Add state parameter to indicate login flow
+                                    // Fix the redirect URL - add missing slash if needed
+                                    const callbackUrl = "https://summeropen2025.com/login"; // Changed to /login since this is the Login component
+                                    const state = "login";
 
                                     const authUrl = `https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${encodeURIComponent(
                                         callbackUrl

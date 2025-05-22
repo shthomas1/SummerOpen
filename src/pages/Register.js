@@ -259,13 +259,14 @@ const Register = () => {
 
   // Add the missing handleGitHubLogin function
   const handleGitHubLogin = () => {
-    // Hard-code the values for now to make sure it works
-    const clientId = "Ov23liirEqIDwwnIsirA";
+    // Use environment variables instead of hardcoded values
+    const clientId = process.env.REACT_APP_GITHUB_CLIENT_ID || "Ov23liirEqIDwwnIsirA";
+    // Fix the URL format - add the missing slash
     const callbackUrl = "https://summeropen2025.com/register";
 
     const authUrl = `https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${encodeURIComponent(
       callbackUrl
-    )}&scope=user:email&state=register`; // Added state parameter for clarity
+    )}&scope=user:email&state=login`; // Using 'login' as the state
 
     window.location.href = authUrl;
   };
