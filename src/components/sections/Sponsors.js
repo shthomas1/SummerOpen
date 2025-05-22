@@ -7,19 +7,20 @@ const Sponsors = () => {
   return (
     <section className="sponsors-section">
       <div className="container">
-        <SectionHeader 
-          title="Our Sponsors" 
+        <SectionHeader
+          title="Our Sponsors"
           subtitle="These amazing organizations make our hackathon possible."
         />
-        
+
         <div className="sponsors-grid">
           {sponsorsData.map((sponsor, index) => (
-            <a 
+            <a
               key={index}
               href={sponsor.url}
               className="sponsor-item"
             >
-              <img src={sponsor.logo} alt={sponsor.name} />
+              <img src={sponsor.logo} alt={""} />
+              <p className="sponsor-name">{sponsor.name}</p>
             </a>
           ))}
         </div>

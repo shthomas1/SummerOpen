@@ -261,7 +261,7 @@ const Register = () => {
   const handleGitHubLogin = () => {
     // Hard-code the values for now to make sure it works
     const clientId = "Ov23liirEqIDwwnIsirA";
-    const callbackUrl = "https://summeropen.netlify.app/register";
+    const callbackUrl = "https://summeropen2025.com/register";
 
     const authUrl = `https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${encodeURIComponent(
       callbackUrl

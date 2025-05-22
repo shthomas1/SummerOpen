@@ -1,8 +1,10 @@
+import image from './images/S2.jpg';
+
 export const sponsorsData = [
   {
-    name: "Tech Corp",
-    logo: "/api/placeholder/180/80?text=TechCorp",
-    url: "#"
+    name: "Signal Surge",
+    logo: image,
+    url: "https://seanhthomas.com"
   },
   {
     name: "DevStudio",

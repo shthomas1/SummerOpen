@@ -128,7 +128,7 @@ const Login = () => {
                                     setError("");
 
                                     const clientId = "Ov23liirEqIDwwnIsirA";
-                                    const callbackUrl = "https://summeropen.netlify.app/register";
+                                    const callbackUrl = "https://summeropen2025.com/register";
                                     const state = "login"; // Add state parameter to indicate login flow
 
                                     const authUrl = `https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${encodeURIComponent(
@@ -151,7 +151,7 @@ const Login = () => {
                                 className="github-button"
                                 onClick={() => {
                                     const clientId = "Ov23liirEqIDwwnIsirA";
-                                    const callbackUrl = "https://summeropen.netlify.app/register";
+                                    const callbackUrl = "https://summeropen2025.com/register";
                                     const state = "login"; // Add state parameter to indicate login flow
 
                                     const authUrl = `https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${encodeURIComponent(

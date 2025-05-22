@@ -67,7 +67,7 @@ const Header = () => {
   const handleGitHubLogin = () => {
     setLoading(true);
     const clientId = "Ov23liirEqIDwwnIsirA";
-    const callbackUrl = "https://summeropen.netlify.app/register";
+    const callbackUrl = "https://summeropen2025.com/register";
     const state = "login";
     const authUrl = `https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${encodeURIComponent(
       callbackUrl
@@ -105,7 +105,7 @@ const Header = () => {
           <div className="left-section">
             <Link to="/" className="logo">
               <div className="logo-icon">&lt;/&gt;</div>
-              <span>Summer Open</span>
+              <span>Summer Open 2025</span>
             </Link>
           </div>
 
