@@ -76,6 +76,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  text-wrap-mode: nowrap;
 }
 
 /* Profile image upload area */
