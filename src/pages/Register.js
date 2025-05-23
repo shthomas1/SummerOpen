@@ -137,6 +137,7 @@ const Register = () => {
   /* eslint-disable react-hooks/exhaustive-deps */
   useEffect(() => {
     // Check if there's a code parameter in the URL (GitHub OAuth callback)
+    window.scrollTo(0, 0);
     const urlParams = new URLSearchParams(location.search);
     const code = urlParams.get("code");
     const state = urlParams.get("state");

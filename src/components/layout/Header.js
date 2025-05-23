@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FaBars, FaGithub } from 'react-icons/fa';
+import { FaBars, FaGithub, FaUser, FaSignOutAlt, FaCalendarAlt } from 'react-icons/fa';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import Countdown from '../ui/Countdown';
 import '../../styles/layout/Header.css';
@@ -82,6 +82,26 @@ const Header = () => {
     navigate('/');
   };
 
+  const handleScheduleClick = () => {
+    // Option 1: Navigate to schedule section on homepage
+    if (isHomePage) {
+      const scheduleSection = document.getElementById('schedule');
+      if (scheduleSection) {
+        scheduleSection.scrollIntoView({ behavior: 'smooth' });
+      }
+    } else {
+      navigate('/#schedule');
+    }
+    
+    // Option 2: Navigate to a dedicated schedule page
+    // navigate('/schedule');
+    
+    // Option 3: Open external calendar/schedule link
+    // window.open('https://your-calendar-link.com', '_blank');
+    
+    if (isMenuOpen) toggleMenu();
+  };
+
   const getNavLink = (sectionId, label) => {
     if (isHomePage) {
       return (
@@ -118,27 +138,37 @@ const Header = () => {
               <FaBars />
             </button>
             <div className={`nav-links ${isMenuOpen ? 'open' : ''}`}>
-              {/* Your getNavLink and auth buttons */}
-              {getNavLink('about', 'About')}
-              {/* ... other links */}
+              {/* Schedule Button */}
+              <button onClick={handleScheduleClick} className="schedule-btn">
+                <FaCalendarAlt />
+                <span>Schedule</span>
+              </button>
+              
               {isLoggedIn ? (
                 <div className="user-profile">
-                  {/* Avatar and logout */}
+                  <div className="user-info">
+                    <FaGithub className="user-icon" />
+                    <span className="username">{userData?.githubUsername || userData?.name || 'User'}</span>
+                  </div>
+                  <button onClick={handleLogout} className="logout-btn" title="Logout">
+                    <FaSignOutAlt />
+                    <span>Logout</span>
+                  </button>
                 </div>
               ) : (
                 <>
                   <button onClick={handleGitHubLogin} className="login-link" disabled={loading}>
+                    <FaGithub />
                     {loading ? 'Connecting...' : 'Login'}
                   </button>
                   <Link to="/register" className="nav-cta" onClick={() => isMenuOpen && toggleMenu()}>
-                    Register Now
+                    Register
                   </Link>
                 </>
               )}
             </div>
           </div>
         </div>
-
       </div>
     </header>
   );
