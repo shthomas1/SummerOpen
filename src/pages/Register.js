@@ -26,11 +26,6 @@ const Register = () => {
   // Add state for GitHub user data including avatar URL
   const [githubUserData, setGithubUserData] = useState(null);
 
-  // GitHub OAuth Configuration
-  const githubClientId = process.env.REACT_APP_GITHUB_CLIENT_ID;
-  const redirectUri =
-    process.env.REACT_APP_REDIRECT_URI || `${window.location.origin}/register`;
-
   // Define fetchGitHubUserData first to avoid circular dependencies
   const fetchGitHubUserData = async (token) => {
     try {
@@ -94,10 +89,6 @@ const Register = () => {
       setLoading(false);
     }
   };
-
-  const githubAuthUrl = `https://github.com/login/oauth/authorize?client_id=${githubClientId}&redirect_uri=${encodeURIComponent(
-    redirectUri
-  )}&scope=user:email`;
 
   // Categories for the hackathon
   const categories = [

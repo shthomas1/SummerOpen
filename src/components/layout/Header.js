@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { FaBars, FaGithub, FaUser, FaSignOutAlt, FaCalendarAlt } from 'react-icons/fa';
+import { FaBars, FaGithub, FaSignOutAlt, FaCalendarAlt } from 'react-icons/fa';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import Countdown from '../ui/Countdown';
-import '../styles/layout/Header.css';
+import '../../styles/layout/Header.css';
 
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -100,22 +100,6 @@ const Header = () => {
     // window.open('https://your-calendar-link.com', '_blank');
     
     if (isMenuOpen) toggleMenu();
-  };
-
-  const getNavLink = (sectionId, label) => {
-    if (isHomePage) {
-      return (
-        <a href={`#${sectionId}`} className="nav-link" onClick={() => isMenuOpen && toggleMenu()}>
-          {label}
-        </a>
-      );
-    } else {
-      return (
-        <Link to={`/#${sectionId}`} className="nav-link" onClick={() => isMenuOpen && toggleMenu()}>
-          {label}
-        </Link>
-      );
-    }
   };
 
   return (
