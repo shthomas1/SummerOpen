@@ -118,17 +118,68 @@
   border-radius: 50px;
   font-weight: 600;
   transition: all 0.3s;
+  font-size: .85rem;
   box-shadow: 0 4px 6px rgba(247, 37, 133, 0.25);
+  border: 2px solid transparent; /* Add transparent border to prevent layout shift */
+  outline: none;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
+/* Invert colors on hover */
 .nav-cta:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 7px 14px rgba(247, 37, 133, 0.3);
-  color: white;
+  background: white; /* White background */
+  color: var(--color-secondary); /* Text color matches gradient start */
+  border: 2px solid var(--color-secondary); /* Border color matches gradient start */
+  box-shadow: 0 7px 14px rgba(247, 37, 133, 0.2);
 }
 
-.nav-cta::after {
-  display: none;
+/* Remove outline on focus */
+.nav-cta:focus {
+  outline: none;
+}
+
+/* Fix for Firefox */
+.nav-cta::-moz-focus-inner {
+  border: 0;
+}
+
+/* Ensure buttons have button-like styling */
+button.nav-cta {
+  cursor: pointer;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+.nav-cta svg {
+  transition: all 0.3s;
+  color: white; /* Initial icon color */
+}
+
+.nav-cta:hover svg {
+  color: var(--color-secondary); /* Icon color on hover matches text */
+}
+
+.nav-cta {
+  height: 36px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+button.nav-cta,
+a.nav-cta {
+  height: 36px;
+  line-height: 1;
+}
+
+.nav-cta span {
+  display: inline-block;
+  line-height: 1;
 }
 
 .mobile-menu-btn {
@@ -209,6 +260,10 @@
   font-size: 0.85rem;
   cursor: pointer;
   transition: all 0.3s ease;
+  height: 36px; /* Match nav-cta height */
+  box-sizing: border-box;
+  justify-content: center;
+  border-radius: 50px; /* Match nav-cta border-radius */
 }
 
 .login-link:hover {
@@ -219,22 +274,6 @@
 .login-link:disabled {
   opacity: 0.6;
   cursor: not-allowed;
-}
-
-.schedule-btn {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  background: linear-gradient(to right, var(--color-secondary), var(--color-secondary-dark));
-  color: white;
-  border: none;
-  padding: 0.5rem 1rem;
-  border-radius: 20px;
-  font-size: 0.85rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 4px rgba(247, 37, 133, 0.2);
 }
 
 .schedule-btn:hover {

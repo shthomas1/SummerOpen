@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { FaCheckCircle, FaCalendarAlt, FaDiscord, FaGithub } from "react-icons/fa";
+import { FaCheckCircle, FaCalendarAlt, FaDiscord, FaGithub, FaUserEdit } from "react-icons/fa";
 import "../styles/pages/ThankYou.css";
 
 const ThankYou = () => {
@@ -41,6 +41,35 @@ const ThankYou = () => {
             )} 
             We're excited to have you join us for this coding adventure!
           </p>
+          
+          {/* New User Profile Section */}
+          <div className="user-profile-section">
+            <h2>Your Profile</h2>
+            <div className="profile-details">
+              {userData.avatar_url && (
+                <img 
+                  src={userData.avatar_url} 
+                  alt={`${userData.name || userData.githubUsername}'s avatar`} 
+                  className="profile-avatar"
+                />
+              )}
+              <div className="profile-info">
+                <p><strong>Name:</strong> {userData.name}</p>
+                <p><strong>GitHub:</strong> {userData.githubUsername}</p>
+                <p><strong>Email:</strong> {userData.email}</p>
+                {userData.categories && (
+                  <p><strong>Categories:</strong> {userData.categories}</p>
+                )}
+                {userData.experience && (
+                  <p><strong>Experience:</strong> {userData.experience}</p>
+                )}
+              </div>
+              <Link to="/update-profile" className="update-profile-button">
+                <FaUserEdit className="button-icon" />
+                Update Profile
+              </Link>
+            </div>
+          </div>
           
           <div className="confirmation-details">
             <h2>What's Next?</h2>
