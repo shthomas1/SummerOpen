@@ -126,6 +126,22 @@ const Register = () => {
 
   /* eslint-disable react-hooks/exhaustive-deps */
   useEffect(() => {
+    // Reset loading state on component mount
+    setLoading(false);
+
+    // This will handle cases where the page refreshes during loading state
+    const handleBeforeUnload = () => {
+      setLoading(false);
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, []);
+
+  useEffect(() => {
     // Check if there's a code parameter in the URL (GitHub OAuth callback)
     window.scrollTo(0, 0);
     const urlParams = new URLSearchParams(location.search);
@@ -142,7 +158,6 @@ const Register = () => {
       }
     }
   }, [isAuthenticated, location]);
-  /* eslint-enable react-hooks/exhaustive-deps */
 
   // Add this for login flow
   const handleLoginFlow = async (code) => {
@@ -169,9 +184,12 @@ const Register = () => {
         // Get user email if not provided
         let email = userData.email;
         if (!email) {
-          const emailResponse = await fetch("https://api.github.com/user/emails", {
-            headers: { Authorization: `token ${data.access_token}` },
-          });
+          const emailResponse = await fetch(
+            "https://api.github.com/user/emails",
+            {
+              headers: { Authorization: `token ${data.access_token}` },
+            }
+          );
 
           const emails = await emailResponse.json();
           const primaryEmail = emails.find((e) => e.primary) || emails[0];
@@ -181,29 +199,37 @@ const Register = () => {
         }
 
         // Check if the user exists in our database
-        const apiUrl = 'https://summeropenreg-esbcg8bgekgrabfu.canadacentral-01.azurewebsites.net/api/Registrations';
+        const apiUrl =
+          "https://summeropenreg-esbcg8bgekgrabfu.canadacentral-01.azurewebsites.net/api/Registrations";
 
         try {
-          const checkResponse = await fetch(`${apiUrl}?email=${encodeURIComponent(email)}`);
+          const checkResponse = await fetch(
+            `${apiUrl}?email=${encodeURIComponent(email)}`
+          );
 
           if (checkResponse.ok) {
             const registrations = await checkResponse.json();
-            const existingUser = Array.isArray(registrations) && registrations.find(
-              reg => reg.email.toLowerCase() === email.toLowerCase()
-            );
+            const existingUser =
+              Array.isArray(registrations) &&
+              registrations.find(
+                (reg) => reg.email.toLowerCase() === email.toLowerCase()
+              );
 
             if (existingUser) {
               // User found - they're already registered
-              localStorage.setItem('registeredUser', JSON.stringify({
-                name: existingUser.name,
-                email: existingUser.email,
-                githubUsername: userData.login,
-                registrationDate: existingUser.registeredAt,
-                avatar_url: userData.avatar_url // Now userData is defined in this scope
-              }));
+              localStorage.setItem(
+                "registeredUser",
+                JSON.stringify({
+                  name: existingUser.name,
+                  email: existingUser.email,
+                  githubUsername: userData.login,
+                  registrationDate: existingUser.registeredAt,
+                  avatar_url: userData.avatar_url, // Now userData is defined in this scope
+                })
+              );
 
               // Redirect to thank you/dashboard page
-              navigate('/thank-you');
+              navigate("/thank-you");
               return; // Exit early
             } else {
               // Not found - proceed with normal registration
@@ -250,16 +276,27 @@ const Register = () => {
 
   // Add the missing handleGitHubLogin function
   const handleGitHubLogin = () => {
-    // Use environment variables instead of hardcoded values
-    const clientId = process.env.REACT_APP_GITHUB_CLIENT_ID || "Ov23liirEqIDwwnIsirA";
-    // Fix the URL format - add the missing slash
-    const callbackUrl = "https://summeropen2025.com/register";
+    try {
+      setLoading(true);
+      // Use environment variables instead of hardcoded values
+      const clientId =
+        process.env.REACT_APP_GITHUB_CLIENT_ID || "Ov23liirEqIDwwnIsirA";
+      const callbackUrl = "https://summeropen2025.com/register";
 
-    const authUrl = `https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${encodeURIComponent(
-      callbackUrl
-    )}&scope=user:email&state=login`; // Using 'login' as the state
+      const authUrl = `https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${encodeURIComponent(
+        callbackUrl
+      )}&scope=user:email&state=login`;
 
-    window.location.href = authUrl;
+      // Add a fallback to reset loading state if redirect doesn't happen
+      setTimeout(() => {
+        setLoading(false);
+      }, 5000);
+
+      window.location.href = authUrl;
+    } catch (error) {
+      console.error("GitHub login error:", error);
+      setLoading(false);
+    }
   };
 
   // Add the missing handleChange function
@@ -298,7 +335,9 @@ const Register = () => {
     );
 
     if (!hasCategory) {
-      setSubmitError("Please select at least one category you're interested in.");
+      setSubmitError(
+        "Please select at least one category you're interested in."
+      );
       setLoading(false);
       return;
     }
@@ -307,13 +346,14 @@ const Register = () => {
       console.log("Form submitted:", formData);
 
       // Send data to Azure API
-      const apiUrl = 'https://summeropenreg-esbcg8bgekgrabfu.canadacentral-01.azurewebsites.net/api/Registrations';
+      const apiUrl =
+        "https://summeropenreg-esbcg8bgekgrabfu.canadacentral-01.azurewebsites.net/api/Registrations";
 
       // Convert the categories object to a string for storage
       const selectedCategories = Object.keys(formData.categories)
-        .filter(key => formData.categories[key])
-        .map(key => {
-          const category = categories.find(cat => cat.id === key);
+        .filter((key) => formData.categories[key])
+        .map((key) => {
+          const category = categories.find((cat) => cat.id === key);
           return category ? category.name : key;
         })
         .join(", ");
@@ -325,17 +365,17 @@ const Register = () => {
         phone: "", // Not collected in this form
         teamName: "", // Also not collected
         experience: formData.experience,
-        expectations: `Selected categories: ${selectedCategories}`
+        expectations: `Selected categories: ${selectedCategories}`,
       };
 
       console.log("Sending to API:", apiData);
 
       const response = await fetch(apiUrl, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json'
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify(apiData)
+        body: JSON.stringify(apiData),
       });
 
       // Check if the response is JSON first
@@ -348,11 +388,15 @@ const Register = () => {
       if (!response.ok) {
         // Handle specific error cases with more user-friendly messages
         if (response.status === 409) {
-          throw new Error("This email address is already registered. Please use a different email or contact support if you need help.");
+          throw new Error(
+            "This email address is already registered. Please use a different email or contact support if you need help."
+          );
         } else if (errorData && (errorData.message || errorData.title)) {
           throw new Error(errorData.message || errorData.title);
         } else {
-          throw new Error(`Registration failed (Error ${response.status}). Please try again.`);
+          throw new Error(
+            `Registration failed (Error ${response.status}). Please try again.`
+          );
         }
       }
 
@@ -365,7 +409,7 @@ const Register = () => {
           email: formData.email,
           categories: selectedCategories,
           registrationDate: new Date().toISOString(),
-          avatar_url: githubUserData?.avatar_url || "" // Use the githubUserData state we added
+          avatar_url: githubUserData?.avatar_url || "", // Use the githubUserData state we added
         })
       );
 
@@ -374,7 +418,10 @@ const Register = () => {
     } catch (error) {
       console.error("Registration error:", error);
       // Show error message to user
-      setSubmitError(error.message || "There was an error submitting your registration. Please try again.");
+      setSubmitError(
+        error.message ||
+          "There was an error submitting your registration. Please try again."
+      );
     } finally {
       setLoading(false);
     }
@@ -432,15 +479,18 @@ const Register = () => {
           <form className="register-form" onSubmit={handleSubmit}>
             {/* Display error message if there is one */}
             {submitError && (
-              <div className="error-message" style={{
-                backgroundColor: "rgba(255, 0, 0, 0.1)",
-                color: "#ff3333",
-                padding: "12px",
-                borderRadius: "5px",
-                marginBottom: "20px",
-                borderLeft: "4px solid #ff3333",
-                fontSize: "0.95rem"
-              }}>
+              <div
+                className="error-message"
+                style={{
+                  backgroundColor: "rgba(255, 0, 0, 0.1)",
+                  color: "#ff3333",
+                  padding: "12px",
+                  borderRadius: "5px",
+                  marginBottom: "20px",
+                  borderLeft: "4px solid #ff3333",
+                  fontSize: "0.95rem",
+                }}
+              >
                 <strong>Error:</strong> {submitError}
               </div>
             )}
