@@ -91,7 +91,7 @@ const ThankYou = () => {
                 </div>
                 <div className="step-content">
                   <h3>Join Our Discord</h3>
-                  <p>Connect with other participants, mentors, and organizers in our Discord community.</p>
+                  <p>Connect with other participants, mentors, and organizers in our Discord community. We will release prompts via Discord.</p>
                   <a 
                     href="https://discord.gg/CZexBXcAfs"
                     className="discord-button"
@@ -108,8 +108,8 @@ const ThankYou = () => {
                   <FaGithub />
                 </div>
                 <div className="step-content">
-                  <h3>Prepare Your GitHub</h3>
-                  <p>Make sure your GitHub account is ready for collaboration. Check out our resources for hackathon preparation.</p>
+                  <h3>Keep an eye on your Email</h3>
+                  <p>At some point before the competition, we will put out more information for competitors. We will release prompts via Email.</p>
                 </div>
               </div>
             </div>

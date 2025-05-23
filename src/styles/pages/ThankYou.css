@@ -209,6 +209,7 @@
 .profile-info {
   flex: 1;
   min-width: 200px;
+  align-content: left;
 }
 
 .profile-info p {
