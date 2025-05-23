@@ -10,7 +10,6 @@ const Register = () => {
     name: "",
     email: "",
     experience: "beginner",
-    agreeTerms: false,
     githubUsername: "",
     categories: {
       fullStackDev: false,
@@ -530,28 +529,11 @@ const Register = () => {
               </div>
             </div>
 
-            <div className="form-group full-width">
-              <div className="checkbox-group">
-                <input
-                  className="form-checkbox"
-                  type="checkbox"
-                  id="agreeTerms"
-                  name="agreeTerms"
-                  checked={formData.agreeTerms}
-                  onChange={handleChange}
-                  required
-                />
-                <label htmlFor="agreeTerms">
-                  I agree to the hackathon rules and code of conduct
-                </label>
-              </div>
-            </div>
-
             <div className="submit-group">
               <button
                 className="submit-button"
                 type="submit"
-                disabled={loading || !formData.agreeTerms}
+                disabled={loading}
               >
                 {loading ? "Processing..." : "Complete Registration"}
               </button>
