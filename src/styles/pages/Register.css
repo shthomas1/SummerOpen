@@ -280,11 +280,11 @@
   .register-content {
     padding: 2rem;
   }
-  
+
   .register-title {
     font-size: 2rem;
   }
-  
+
   .register-form {
     grid-template-columns: 1fr;
   }
@@ -293,7 +293,7 @@
   .submit-group {
     grid-column: span 1;
   }
-  
+
   .category-checkbox {
     padding: 0.75rem;
   }
@@ -303,12 +303,34 @@
   .register-content {
     padding: 1.5rem;
   }
-  
+
   .register-title {
     font-size: 1.8rem;
   }
-  
+
   .github-button {
     max-width: 100%;
   }
+}
+
+/* Add this to your Register.css file */
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.spinner {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: white;
+  animation: spin 1s linear infinite;
+  margin-right: 8px;
+  vertical-align: middle;
 }

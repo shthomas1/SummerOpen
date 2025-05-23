@@ -72,7 +72,7 @@ const Register = () => {
       return false;
     }
   };
-  
+
   // Define fetchGitHubUserData first to avoid circular dependencies
   const fetchGitHubUserData = async (token) => {
     try {
@@ -414,10 +414,27 @@ const Register = () => {
     e.preventDefault();
     console.log("Submit started");
 
+    // Prevent submitting if already loading
+    if (loading) {
+      console.log("Already processing a submission, ignoring");
+      return;
+    }
+
     // Clear any previous errors
     setSubmitError("");
+
     // Set loading state
     setLoading(true);
+
+    // Add a timeout to automatically reset loading state after 30 seconds
+    // This prevents the button from being stuck in loading state forever
+    const loadingTimeout = setTimeout(() => {
+      console.log("Loading timeout reached, resetting state");
+      setLoading(false);
+      setSubmitError(
+        "The request is taking longer than expected. Please try again."
+      );
+    }, 30000);
 
     // Validate that at least one category is selected
     const hasCategory = Object.values(formData.categories).some(
@@ -430,6 +447,7 @@ const Register = () => {
       );
       console.log("No category selected");
       setLoading(false);
+      clearTimeout(loadingTimeout);
       return;
     }
 
@@ -505,6 +523,9 @@ const Register = () => {
 
       console.log("API call succeeded, storing in localStorage");
 
+      // Clear the timeout since the operation completed successfully
+      clearTimeout(loadingTimeout);
+
       // API call succeeded, now store in localStorage
       localStorage.setItem(
         "registeredUser",
@@ -526,15 +547,21 @@ const Register = () => {
       // Redirect to thank you page
       navigate("/thank-you");
     } catch (error) {
+      // Clear the timeout since the operation completed (with an error)
+      clearTimeout(loadingTimeout);
+
       console.error("Registration error:", error);
       // Show error message to user
       setSubmitError(
         error.message ||
           "There was an error submitting your registration. Please try again."
       );
+
+      // Ensure loading state is reset on error
+      setLoading(false);
     } finally {
       console.log("Finally block executed, setting loading to false");
-      // Make sure loading state is reset
+      // Ensure loading state is reset in all cases
       setLoading(false);
     }
   };
@@ -621,7 +648,6 @@ const Register = () => {
                 <strong>Error:</strong> {submitError}
               </div>
             )}
-
             {!apiConnected && (
               <div
                 className="warning-message"
@@ -640,7 +666,6 @@ const Register = () => {
                 and synchronized when the connection is restored.
               </div>
             )}
-
             <div className="form-group">
               <label className="form-label" htmlFor="name">
                 Your Name
@@ -655,7 +680,6 @@ const Register = () => {
                 required
               />
             </div>
-
             <div className="form-group">
               <label className="form-label" htmlFor="email">
                 Email Address
@@ -673,7 +697,6 @@ const Register = () => {
                 We'll send hackathon updates to this email
               </small>
             </div>
-
             <div className="form-group">
               <label className="form-label" htmlFor="experience">
                 Experience Level
@@ -690,7 +713,6 @@ const Register = () => {
                 <option value="advanced">Advanced (3+ years)</option>
               </select>
             </div>
-
             <div className="form-group full-width">
               <label className="form-label category-label">
                 Which categories are you interested in? (Select at least one)
@@ -715,16 +737,41 @@ const Register = () => {
                 ))}
               </div>
             </div>
-
             <div className="submit-group" style={{ marginBottom: "40px" }}>
               <button
                 className="submit-button"
                 type="submit"
                 disabled={loading}
-                style={{ height: "48px" }}
+                style={{
+                  height: "48px",
+                  position: "relative",
+                }}
               >
-                {loading ? "Processing..." : "Complete Registration"}
+                {loading ? (
+                  <>
+                    <span className="spinner"></span>
+                    Processing...
+                  </>
+                ) : (
+                  "Complete Registration"
+                )}
               </button>
+
+              {loading && (
+                <div
+                  style={{
+                    position: "absolute",
+                    bottom: "-30px",
+                    left: "0",
+                    right: "0",
+                    textAlign: "center",
+                    fontSize: "0.9rem",
+                    color: "#666",
+                  }}
+                >
+                  Please wait a moment while we process your registration...
+                </div>
+              )}
 
               <Link
                 to="/"
