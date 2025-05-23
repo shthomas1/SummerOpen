@@ -30,29 +30,49 @@ const Register = () => {
   // Test API connection
   const testAPIConnection = async () => {
     try {
-      const apiUrl = 'https://summeropenreg-esbcg8bgekgrabfu.canadacentral-01.azurewebsites.net/api/Registrations';
-      
-      // Attempt a simple HEAD request to check if the API is reachable
+      const apiUrl =
+        "https://summeropenreg-esbcg8bgekgrabfu.canadacentral-01.azurewebsites.net/api/Registrations";
+
+      // Use GET instead of HEAD since the API might not support HEAD
       const response = await fetch(apiUrl, {
-        method: 'HEAD',
-        cache: 'no-cache'
+        method: "GET",
+        cache: "no-cache",
+        headers: {
+          Accept: "application/json",
+        },
       });
-      
-      console.log('API connection test result:', {
+
+      // An empty array is a valid response, so check if response can be parsed as JSON
+      const text = await response.text();
+      let isValid = false;
+
+      try {
+        // Check if response is valid JSON (even an empty array)
+        const data = JSON.parse(text);
+        isValid = true;
+        console.log("API returned valid JSON:", data);
+      } catch (parseError) {
+        console.error("API response is not valid JSON:", text);
+      }
+
+      console.log("API connection test result:", {
         status: response.status,
         ok: response.ok,
-        statusText: response.statusText
+        statusText: response.statusText,
+        isValidJson: isValid,
       });
-      
-      setApiConnected(response.ok);
-      return response.ok;
+
+      // Consider the API connected if we got a 200 status and valid JSON
+      const apiConnected = response.ok && isValid;
+      setApiConnected(apiConnected);
+      return apiConnected;
     } catch (error) {
-      console.error('API connection test failed:', error);
+      console.error("API connection test failed:", error);
       setApiConnected(false);
       return false;
     }
   };
-
+  
   // Define fetchGitHubUserData first to avoid circular dependencies
   const fetchGitHubUserData = async (token) => {
     try {
@@ -155,33 +175,33 @@ const Register = () => {
   // Reset loading state on component mount
   useEffect(() => {
     setLoading(false);
-    
+
     // Test API connection when component mounts
     testAPIConnection();
-    
+
     // This will handle cases where the page refreshes during loading state
     const handleBeforeUnload = () => {
       setLoading(false);
     };
-    
-    window.addEventListener('beforeunload', handleBeforeUnload);
-    
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
     return () => {
-      window.removeEventListener('beforeunload', handleBeforeUnload);
+      window.removeEventListener("beforeunload", handleBeforeUnload);
     };
   }, []);
 
   // Handle loading timeout - if loading is true for more than 15 seconds, reset it
   useEffect(() => {
     let timeoutId;
-    
+
     if (loading) {
       timeoutId = setTimeout(() => {
         console.log("Loading timeout triggered - resetting loading state");
         setLoading(false);
       }, 15000);
     }
-    
+
     return () => {
       if (timeoutId) clearTimeout(timeoutId);
     };
@@ -327,7 +347,8 @@ const Register = () => {
     try {
       setLoading(true);
       // Use environment variables instead of hardcoded values
-      const clientId = process.env.REACT_APP_GITHUB_CLIENT_ID || "Ov23liirEqIDwwnIsirA";
+      const clientId =
+        process.env.REACT_APP_GITHUB_CLIENT_ID || "Ov23liirEqIDwwnIsirA";
       const callbackUrl = "https://summeropen2025.com/register";
 
       const authUrl = `https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${encodeURIComponent(
@@ -338,7 +359,7 @@ const Register = () => {
       setTimeout(() => {
         setLoading(false);
       }, 5000);
-      
+
       window.location.href = authUrl;
     } catch (error) {
       console.error("GitHub login error:", error);
@@ -370,27 +391,29 @@ const Register = () => {
   // Mock API response for testing
   const mockAPIResponse = () => {
     return new Promise((resolve) => {
-      console.log('Using mock API response');
-      
+      console.log("Using mock API response");
+
       // Simulate network delay
       setTimeout(() => {
         resolve({
           ok: true,
           status: 200,
           headers: {
-            get: () => 'application/json'
+            get: () => "application/json",
           },
-          json: () => Promise.resolve({ message: 'Registration successful' })
+          json: () => Promise.resolve({ message: "Registration successful" }),
         });
       }, 1000);
     });
   };
 
   // Form submission handler with extensive logging
+  // Replace your current handleSubmit function with this improved version
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Submit started, setting loading to true");
-    
+    console.log("Submit started");
+
     // Clear any previous errors
     setSubmitError("");
     // Set loading state
@@ -402,23 +425,26 @@ const Register = () => {
     );
 
     if (!hasCategory) {
-      setSubmitError("Please select at least one category you're interested in.");
-      console.log("No category selected, setting loading to false");
+      setSubmitError(
+        "Please select at least one category you're interested in."
+      );
+      console.log("No category selected");
       setLoading(false);
       return;
     }
 
     try {
-      console.log("Form submitted:", formData);
+      console.log("Form data:", formData);
 
       // Send data to Azure API
-      const apiUrl = 'https://summeropenreg-esbcg8bgekgrabfu.canadacentral-01.azurewebsites.net/api/Registrations';
+      const apiUrl =
+        "https://summeropenreg-esbcg8bgekgrabfu.canadacentral-01.azurewebsites.net/api/Registrations";
 
       // Convert the categories object to a string for storage
       const selectedCategories = Object.keys(formData.categories)
-        .filter(key => formData.categories[key])
-        .map(key => {
-          const category = categories.find(cat => cat.id === key);
+        .filter((key) => formData.categories[key])
+        .map((key) => {
+          const category = categories.find((cat) => cat.id === key);
           return category ? category.name : key;
         })
         .join(", ");
@@ -430,44 +456,50 @@ const Register = () => {
         phone: "", // Not collected in this form
         teamName: "", // Also not collected
         experience: formData.experience,
-        expectations: `Selected categories: ${selectedCategories}`
+        expectations: `Selected categories: ${selectedCategories}`,
       };
 
       console.log("Sending to API:", apiData);
 
-      // Use either the real API or the mock depending on connection test
-      let response;
-      if (apiConnected) {
-        response = await fetch(apiUrl, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(apiData)
-        });
-      } else {
-        // Use mock response if API is not connected
-        response = await mockAPIResponse();
-      }
+      // Send the registration data to the API
+      const response = await fetch(apiUrl, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify(apiData),
+      });
 
-      console.log("API response received:", response.status);
+      console.log("API response status:", response.status);
 
-      // Check if the response is JSON first
-      const contentType = response.headers.get("content-type");
-      let errorData;
-      if (contentType && contentType.indexOf("application/json") !== -1) {
-        errorData = await response.json();
-        console.log("Response JSON:", errorData);
+      // Try to get the response body as text first
+      const responseText = await response.text();
+      console.log("API response text:", responseText);
+
+      // Then try to parse it as JSON if possible
+      let errorData = null;
+      if (responseText) {
+        try {
+          errorData = JSON.parse(responseText);
+          console.log("API response JSON:", errorData);
+        } catch (parseError) {
+          console.log("Response is not JSON");
+        }
       }
 
       if (!response.ok) {
         // Handle specific error cases with more user-friendly messages
         if (response.status === 409) {
-          throw new Error("This email address is already registered. Please use a different email or contact support if you need help.");
+          throw new Error(
+            "This email address is already registered. Please use a different email or contact support if you need help."
+          );
         } else if (errorData && (errorData.message || errorData.title)) {
           throw new Error(errorData.message || errorData.title);
         } else {
-          throw new Error(`Registration failed (Error ${response.status}). Please try again.`);
+          throw new Error(
+            `Registration failed (Error ${response.status}). Please try again.`
+          );
         }
       }
 
@@ -482,25 +514,27 @@ const Register = () => {
           email: formData.email,
           categories: selectedCategories,
           registrationDate: new Date().toISOString(),
-          avatar_url: githubUserData?.avatar_url || "" // Use the githubUserData state we added
+          avatar_url: githubUserData?.avatar_url || "", // Use the githubUserData state we added
         })
       );
 
-      console.log("Redirecting to thank-you page");
-      
+      console.log("Setting loading to false before navigation");
       // Make sure loading is false before navigation
       setLoading(false);
-      
+
+      console.log("Redirecting to thank-you page");
       // Redirect to thank you page
       navigate("/thank-you");
     } catch (error) {
       console.error("Registration error:", error);
       // Show error message to user
-      setSubmitError(error.message || "There was an error submitting your registration. Please try again.");
-      // Ensure loading is set to false
-      setLoading(false);
+      setSubmitError(
+        error.message ||
+          "There was an error submitting your registration. Please try again."
+      );
     } finally {
       console.log("Finally block executed, setting loading to false");
+      // Make sure loading state is reset
       setLoading(false);
     }
   };
@@ -550,11 +584,16 @@ const Register = () => {
           <div className="github-connected">
             <div className="github-profile">
               {githubUserData?.avatar_url && (
-                <img 
-                  src={githubUserData.avatar_url} 
-                  alt={`${githubUserData.name}'s avatar`} 
-                  className="github-avatar" 
-                  style={{ width: "30px", height: "30px", borderRadius: "50%", marginRight: "10px" }}
+                <img
+                  src={githubUserData.avatar_url}
+                  alt={`${githubUserData.name}'s avatar`}
+                  className="github-avatar"
+                  style={{
+                    width: "30px",
+                    height: "30px",
+                    borderRadius: "50%",
+                    marginRight: "10px",
+                  }}
                 />
               )}
               <FaGithub className="github-icon" />
@@ -582,7 +621,7 @@ const Register = () => {
                 <strong>Error:</strong> {submitError}
               </div>
             )}
-            
+
             {!apiConnected && (
               <div
                 className="warning-message"
@@ -596,7 +635,9 @@ const Register = () => {
                   fontSize: "0.95rem",
                 }}
               >
-                <strong>Note:</strong> We're having trouble connecting to our registration service. Your registration will be stored locally and synchronized when the connection is restored.
+                <strong>Note:</strong> We're having trouble connecting to our
+                registration service. Your registration will be stored locally
+                and synchronized when the connection is restored.
               </div>
             )}
 
@@ -684,9 +725,9 @@ const Register = () => {
               >
                 {loading ? "Processing..." : "Complete Registration"}
               </button>
-              
-              <Link 
-                to="/" 
+
+              <Link
+                to="/"
                 className="cancel-button"
                 style={{
                   backgroundColor: "transparent",
@@ -698,7 +739,7 @@ const Register = () => {
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
-                  height: "48px"
+                  height: "48px",
                 }}
               >
                 Cancel
