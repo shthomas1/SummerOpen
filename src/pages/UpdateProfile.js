@@ -1,13 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { FaGithub, FaSignOutAlt, FaCalendarAlt } from "react-icons/fa";
+import { FaGithub, FaSignOutAlt} from "react-icons/fa";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-// Fix the import paths based on the project structure
-import Countdown from "../components/ui/Countdown";
 import "../styles/pages/Login.css";
 
 const UpdateProfile = () => {
-  const [isScrolled, setIsScrolled] = useState(false);
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -27,7 +23,6 @@ const UpdateProfile = () => {
 
   const location = useLocation();
   const navigate = useNavigate();
-  const isHomePage = location.pathname === "/";
 
   useEffect(() => {
     const checkLoginStatus = () => {
