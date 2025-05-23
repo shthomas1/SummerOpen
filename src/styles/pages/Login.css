@@ -119,3 +119,60 @@
   font-size: 0.9rem;
   color: var(--color-text-light);
 }
+
+.profile-form .submit-group {
+  display: flex;
+  gap: 15px;
+  margin-top: 20px;
+  margin-bottom: 40px; /* Add space between buttons and footer */
+  justify-content: center;
+}
+
+.profile-form .submit-button {
+  background-color: var(--color-primary, #4361ee);
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex: 1;
+  max-width: 200px;
+  height: 48px; /* Set fixed height for both buttons */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.profile-form .submit-button:hover {
+  background-color: var(--color-primary-dark, #2c5282);
+}
+
+.profile-form .submit-button:disabled {
+  background-color: #a0aec0;
+  cursor: not-allowed;
+}
+
+.profile-form .cancel-button {
+  padding: 12px 24px;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  background-color: transparent;
+  color: var(--color-primary, #4361ee);
+  text-align: center;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  flex: 1;
+  max-width: 200px;
+  height: 48px; /* Same height as the submit button */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--color-primary, #4361ee);
+}
+
+.profile-form .cancel-button:hover {
+  background-color: rgba(67, 97, 238, 0.05);
+}
