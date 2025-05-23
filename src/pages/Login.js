@@ -121,10 +121,6 @@ const Login = () => {
                     ) : error ? (
                         <div className="error-container">
                             <p className="error-message">{error}</p>
-                            // In your Login.js component
-                            // Fix the GitHub OAuth URL in three places:
-
-                            // 1. In the retry-button onClick handler:
                             <button
                                 className="retry-button"
                                 onClick={() => {

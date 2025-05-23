@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { FaBars, FaGithub, FaSignOutAlt, FaCalendarAlt } from 'react-icons/fa';
+import { FaBars, FaGithub, FaSignOutAlt, FaCalendarAlt, FaUserEdit } from 'react-icons/fa';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import Countdown from '../ui/Countdown';
-import '../../styles/Header.css';
+import '../../styles/layout/Header.css';
 
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -10,6 +10,7 @@ const Header = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [showProfileMenu, setShowProfileMenu] = useState(false);
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -55,6 +56,21 @@ const Header = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // Close profile menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      const profileElement = document.getElementById('user-profile-dropdown');
+      if (profileElement && !profileElement.contains(event.target) && showProfileMenu) {
+        setShowProfileMenu(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [showProfileMenu]);
+
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
     if (isMenuOpen) {
@@ -62,6 +78,10 @@ const Header = () => {
     } else {
       document.body.style.overflow = 'hidden';
     }
+  };
+
+  const toggleProfileMenu = () => {
+    setShowProfileMenu(!showProfileMenu);
   };
 
   const handleGitHubLogin = () => {
@@ -79,6 +99,7 @@ const Header = () => {
     localStorage.removeItem('registeredUser');
     setIsLoggedIn(false);
     setUserData(null);
+    setShowProfileMenu(false);
     navigate('/');
   };
 
@@ -100,6 +121,11 @@ const Header = () => {
     // window.open('https://your-calendar-link.com', '_blank');
     
     if (isMenuOpen) toggleMenu();
+  };
+
+  const handleUpdateProfile = () => {
+    setShowProfileMenu(false);
+    navigate('/update-profile');
   };
 
   return (
@@ -129,15 +155,37 @@ const Header = () => {
               </button>
               
               {isLoggedIn ? (
-                <div className="user-profile">
-                  <div className="user-info">
-                    <FaGithub className="user-icon" />
+                <div className="user-profile" id="user-profile-dropdown">
+                  <div 
+                    className="user-info" 
+                    onClick={toggleProfileMenu}
+                    style={{ cursor: 'pointer' }}
+                  >
+                    {userData?.avatar_url ? (
+                      <img 
+                        src={userData.avatar_url} 
+                        alt={`${userData.name}'s avatar`} 
+                        className="user-avatar" 
+                      />
+                    ) : (
+                      <FaGithub className="user-icon" />
+                    )}
                     <span className="username">{userData?.githubUsername || userData?.name || 'User'}</span>
                   </div>
-                  <button onClick={handleLogout} className="logout-btn" title="Logout">
-                    <FaSignOutAlt />
-                    <span>Logout</span>
-                  </button>
+                  
+                  {/* Profile dropdown menu */}
+                  {showProfileMenu && (
+                    <div className="profile-dropdown">
+                      <button onClick={handleUpdateProfile} className="dropdown-item">
+                        <FaUserEdit />
+                        <span>Update Profile</span>
+                      </button>
+                      <button onClick={handleLogout} className="dropdown-item">
+                        <FaSignOutAlt />
+                        <span>Logout</span>
+                      </button>
+                    </div>
+                  )}
                 </div>
               ) : (
                 <>
