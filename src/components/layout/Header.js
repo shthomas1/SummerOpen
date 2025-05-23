@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { FaBars, FaGithub, FaUser, FaSignOutAlt, FaCalendarAlt } from 'react-icons/fa';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import Countdown from '../ui/Countdown';
-import '../../styles/layout/Header.css';
+import '../styles/layout/Header.css';
 
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
