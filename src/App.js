@@ -17,7 +17,7 @@ import EventDetails from "./components/sections/EventDetails";
 import About from "./components/sections/About";
 import Schedule from "./components/sections/Schedule";
 import Benefits from "./components/sections/Benefits";
-import Mentors from "./components/sections/Mentors";
+import Team from "./components/sections/Team";
 import FAQ from "./components/sections/FAQ";
 import Sponsors from "./components/sections/Sponsors";
 
@@ -32,7 +32,7 @@ const HomePage = () => (
     <About />
     <Schedule />
     <Benefits />
-    <Mentors />
+    <Team />
     <FAQ />
     <Sponsors />
   </>
