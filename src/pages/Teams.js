@@ -40,8 +40,14 @@ const Teams = () => {
       setCurrentUser(JSON.parse(userData));
     }
     fetchTeams();
-    checkUserTeamMembership();
   }, []);
+
+  // Separate useEffect to check team membership after currentUser is set
+  useEffect(() => {
+    if (currentUser?.email) {
+      checkUserTeamMembership();
+    }
+  }, [currentUser]);
 
   const fetchTeams = async () => {
     try {
@@ -99,6 +105,9 @@ const Teams = () => {
         setShowCreateForm(false);
         setSuccess('Team created successfully!');
         setTimeout(() => setSuccess(''), 3000);
+        // Refresh teams and membership to ensure UI is in sync
+        fetchTeams();
+        checkUserTeamMembership();
       } else {
         const errorData = await response.json();
         setError(errorData.message || 'Failed to create team');
@@ -129,6 +138,9 @@ const Teams = () => {
         setUserTeam({ teamID: teamId, teamName: updatedTeam.teamName, role: 'member' });
         setSuccess('Successfully joined team!');
         setTimeout(() => setSuccess(''), 3000);
+        // Refresh teams and membership to ensure UI is in sync
+        fetchTeams();
+        checkUserTeamMembership();
       } else {
         // Better error handling - let's see what the API actually sends
         const responseText = await response.text();
