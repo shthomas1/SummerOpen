@@ -10,7 +10,7 @@ import {
   FaSearch,
   FaExchangeAlt
 } from 'react-icons/fa';
-import '../styles/Teams.css';
+import '../styles/pages/Teams.css';
 
 const Teams = () => {
   const [teams, setTeams] = useState([]);
