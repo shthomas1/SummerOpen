@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { motion } from 'framer-motion';
 import SectionHeader from '../ui/SectionHeader';
 import Button from '../ui/Button';
+import "../../styles/GlobalStyles.css";
 
 const AboutSection = styled.section`
   background-color: ${props => props.theme.colors.light};
@@ -95,7 +96,7 @@ const About = () => {
             </AboutPoint>
           </AboutPoints>
 
-          <Button href="register" variant="primary">Join the Challenge</Button>
+          <Button href="/register" variant="primary" className="register-button">Join the Challenge</Button>
         </motion.div>
       </AboutContainer>
     </AboutSection>

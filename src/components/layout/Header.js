@@ -5,7 +5,7 @@ import {
   FaSignOutAlt,
   FaCalendarAlt,
   FaUserEdit,
-  FaUsers, // Add this import for teams icon
+  FaUsers,
 } from "react-icons/fa";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import Countdown from "../ui/Countdown";

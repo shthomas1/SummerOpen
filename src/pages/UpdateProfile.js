@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { FaGithub, FaSignOutAlt} from "react-icons/fa";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import "../styles/pages/Login.css";
+import "../styles/pages/UpdateProfile.css";
 
 const UpdateProfile = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -38,6 +38,7 @@ const UpdateProfile = () => {
             ...prev,
             name: parsedUser.name || "",
             email: parsedUser.email || "",
+            experience: parsedUser.experience || "beginner",
             // If we have stored categories, parse them
             categories: parseCategoriesFromString(parsedUser.categories || ""),
           }));
@@ -47,8 +48,8 @@ const UpdateProfile = () => {
       } else {
         setIsLoggedIn(false);
         setUserData(null);
-        // Redirect to login if not logged in
-        navigate("/login");
+        // Redirect to home if not logged in
+        navigate("/");
       }
     };
 
@@ -134,8 +135,6 @@ const UpdateProfile = () => {
       }));
     }
   };
-
-  // Inside the handleSubmit function, update the API data formatting section:
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -312,7 +311,15 @@ const UpdateProfile = () => {
 
   // If not logged in, redirect (handled in useEffect)
   if (!isLoggedIn) {
-    return <div className="loading">Checking login status...</div>;
+    return (
+      <div className="update-profile-page">
+        <div className="container">
+          <div className="profile-content">
+            <div className="loading">Checking login status...</div>
+          </div>
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -323,17 +330,19 @@ const UpdateProfile = () => {
 
           <div className="github-connected">
             <div className="github-profile">
-              {userData?.avatar_url && (
-                <img
-                  src={userData.avatar_url}
-                  alt={`${userData.name}'s avatar`}
-                  className="github-avatar"
-                />
-              )}
-              <FaGithub className="github-icon" />
-              <span>
-                Connected as <strong>{userData?.githubUsername}</strong>
-              </span>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                {userData?.avatar_url && (
+                  <img
+                    src={userData.avatar_url}
+                    alt={`${userData.name}'s avatar`}
+                    className="github-avatar"
+                  />
+                )}
+                <FaGithub className="github-icon" />
+                <span>
+                  Connected as <strong>{userData?.githubUsername}</strong>
+                </span>
+              </div>
               <button
                 onClick={handleLogout}
                 className="logout-btn"
@@ -348,18 +357,7 @@ const UpdateProfile = () => {
           <form className="profile-form" onSubmit={handleSubmit}>
             {/* Display error message if there is one */}
             {submitError && (
-              <div
-                className="error-message"
-                style={{
-                  backgroundColor: "rgba(255, 0, 0, 0.1)",
-                  color: "#ff3333",
-                  padding: "12px",
-                  borderRadius: "5px",
-                  marginBottom: "20px",
-                  borderLeft: "4px solid #ff3333",
-                  fontSize: "0.95rem",
-                }}
-              >
+              <div className="error-message">
                 <strong>Error:</strong> {submitError}
               </div>
             )}

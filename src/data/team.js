@@ -45,15 +45,25 @@ export const teamData = [
       website: "https://www.richardlechko.com/",
     },
   },
-  {
-    name: "Anthony Sistilli",
-    role: "Content Creator & Judge",
-    bio: "Founder @ Fallom.dev & Content Creator",
-    image: "/images/asistilli.jpg",
+    {
+    name: "Matthew Fickling",
+    role: "Judge",
+    bio: "Assistant Manager @ Whitefab, Inc. | Univ of Alabama Management Information Systems Graduate",
+    image: "/images/matthewfickling.jpg",
     category: "judge",
     social: {
-      linkedin: "https://www.linkedin.com/in/asistilli/",
-      website: "https://www.youtube.com/@AnthonySistilli",
+      linkedin: "https://www.linkedin.com/in/matthew-fickling/",
     },
   },
+  // {
+  //   name: "Anthony Sistilli",
+  //   role: "Content Creator & Judge",
+  //   bio: "Founder @ Fallom.dev & Content Creator",
+  //   image: "/images/asistilli.jpg",
+  //   category: "judge",
+  //   social: {
+  //     linkedin: "https://www.linkedin.com/in/asistilli/",
+  //     website: "https://www.youtube.com/@AnthonySistilli",
+  //   },
+  // },
 ];

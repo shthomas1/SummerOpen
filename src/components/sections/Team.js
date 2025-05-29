@@ -70,7 +70,7 @@ const Team = () => {
       <div className="container">
         <SectionHeader
           title="Meet Our Team"
-          subtitle="These are the people who help make this event possible."
+          subtitle="These people helped make this event possible."
         />
 
         {/* Organizers Section */}

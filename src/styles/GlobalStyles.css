@@ -79,3 +79,75 @@ section {
   animation: fadeIn 1s ease-out 0.6s forwards;
   opacity: 0;
 }
+
+/* Add this to your global CSS or component CSS files */
+
+/* Make all registration buttons match the header nav-cta style */
+.register-button,
+.btn-register,
+.hero-register-btn,
+.about-register-btn {
+  background: linear-gradient(to right, var(--color-secondary), var(--color-secondary-dark));
+  color: white;
+  padding: 0.5rem 1.5rem;
+  border-radius: 50px;
+  font-weight: 600;
+  transition: all 0.3s;
+  font-size: .85rem;
+  box-shadow: 0 4px 6px rgba(247, 37, 133, 0.25);
+  border: 2px solid transparent;
+  outline: none;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  height: 36px;
+  box-sizing: border-box;
+  justify-content: center;
+  line-height: 1;
+}
+
+/* Large size for hero section */
+.register-button-large,
+.hero-register-btn {
+  padding: 0.75rem 2rem;
+  font-size: 1rem;
+  height: 44px;
+}
+
+/* Hover effects matching header */
+.register-button:hover,
+.btn-register:hover,
+.hero-register-btn:hover,
+.about-register-btn:hover {
+  background: white;
+  color: var(--color-secondary);
+  border: 2px solid var(--color-secondary);
+  box-shadow: 0 7px 14px rgba(247, 37, 133, 0.2);
+  text-decoration: none;
+  transform: translateY(-1px);
+}
+
+.register-button:focus,
+.btn-register:focus,
+.hero-register-btn:focus,
+.about-register-btn:focus {
+  outline: none;
+}
+
+/* Icon styling */
+.register-button svg,
+.btn-register svg,
+.hero-register-btn svg,
+.about-register-btn svg {
+  transition: all 0.3s;
+  color: white;
+}
+
+.register-button:hover svg,
+.btn-register:hover svg,
+.hero-register-btn:hover svg,
+.about-register-btn:hover svg {
+  color: var(--color-secondary);
+}

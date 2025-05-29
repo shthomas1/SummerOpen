@@ -1,6 +1,7 @@
 import React from "react";
-import Button from "../ui/Button";
+import { Link } from "react-router-dom";
 import "../../styles/sections/Hero.css";
+import "../../styles/GlobalStyles.css";
 
 const Hero = () => {
   return (
@@ -23,9 +24,9 @@ const Hero = () => {
           </p>
 
           <div className="hero-cta-group">
-            <Button href="/register" variant="secondary" size="large">
+            <Link to="/register" className="register-button register-button-large">
               Register Now
-            </Button>
+            </Link>
           </div>
 
           <div className="hero-stats">
