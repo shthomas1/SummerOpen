@@ -10,7 +10,7 @@ import {
   FaSearch,
   FaExchangeAlt
 } from 'react-icons/fa';
-import '../styles/pages/Teams.css';
+import '../styles/Teams.css';
 
 const Teams = () => {
   const [teams, setTeams] = useState([]);
@@ -30,7 +30,7 @@ const Teams = () => {
   const [transferEmail, setTransferEmail] = useState('');
   const [showTransferForm, setShowTransferForm] = useState(false);
 
-  const API_BASE = 'https://summeropenreg-72c056a72d7b.herokuapp.com/api';
+  const API_BASE = 'https://summeropenreg-esbcg8bgekgrabfu.canadacentral-01.azurewebsites.net/api';
 
   useEffect(() => {
     const userData = localStorage.getItem('registeredUser');
