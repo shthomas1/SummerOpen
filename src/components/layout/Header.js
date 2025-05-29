@@ -128,8 +128,9 @@ const Header = () => {
       navigate("/");
     }
 
-    // Close mobile menu if open
+    // Close mobile menu and profile dropdown if open
     if (isMenuOpen) toggleMenu();
+    if (showProfileMenu) setShowProfileMenu(false);
   };
 
   // Add this effect to your component to handle the scroll after navigation
@@ -157,6 +158,7 @@ const Header = () => {
   const handleTeamsClick = () => {
     navigate("/teams");
     if (isMenuOpen) toggleMenu();
+    if (showProfileMenu) setShowProfileMenu(false);
   };
 
   return (
@@ -183,20 +185,6 @@ const Header = () => {
               <FaBars />
             </button>
             <div className={`nav-links ${isMenuOpen ? "open" : ""}`}>
-              {/* Schedule Button */}
-              <button onClick={handleScheduleClick} className="nav-cta">
-                <FaCalendarAlt />
-                <span>Schedule</span>
-              </button>
-
-              {/* Teams Button - Only show when logged in */}
-              {isLoggedIn && (
-                <button onClick={handleTeamsClick} className="nav-cta">
-                  <FaUsers />
-                  <span>Teams</span>
-                </button>
-              )}
-
               {isLoggedIn ? (
                 <div className="user-profile" id="user-profile-dropdown">
                   <div
@@ -218,9 +206,17 @@ const Header = () => {
                     </span>
                   </div>
 
-                  {/* Profile dropdown menu */}
+                  {/* Profile dropdown menu with all user actions */}
                   {showProfileMenu && (
                     <div className="profile-dropdown">
+                      <button onClick={handleScheduleClick} className="dropdown-item">
+                        <FaCalendarAlt />
+                        <span>Schedule</span>
+                      </button>
+                      <button onClick={handleTeamsClick} className="dropdown-item">
+                        <FaUsers />
+                        <span>Teams</span>
+                      </button>
                       <button
                         onClick={handleUpdateProfile}
                         className="dropdown-item"
@@ -237,6 +233,11 @@ const Header = () => {
                 </div>
               ) : (
                 <>
+                  {/* Schedule Button - Show for non-logged in users */}
+                  <button onClick={handleScheduleClick} className="nav-cta">
+                    <FaCalendarAlt />
+                    <span>Schedule</span>
+                  </button>
                   <button
                     onClick={handleGitHubLogin}
                     className="login-link"
