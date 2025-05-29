@@ -1,8 +1,13 @@
-.teams-container {
+.teams-page {
+  min-height: 100vh;
+  padding-top: 120px; /* Space for fixed header */
+  padding-bottom: 2rem;
+}
+
+.teams-content {
   max-width: 1200px;
   margin: 0 auto;
   padding: 2rem;
-  min-height: 80vh;
 }
 
 .teams-header {

@@ -10,7 +10,7 @@ import {
   FaSearch,
   FaExchangeAlt
 } from 'react-icons/fa';
-import '../styles/pages/Teams.css';
+import '../styles/Teams.css';
 
 const Teams = () => {
   const [teams, setTeams] = useState([]);
@@ -30,7 +30,7 @@ const Teams = () => {
   const [transferEmail, setTransferEmail] = useState('');
   const [showTransferForm, setShowTransferForm] = useState(false);
 
-  const API_BASE = 'https://summeropenreg-esbcg8bgekgrabfu.canadacentral-01.azurewebsites.net/api/';
+  const API_BASE = 'https://summeropenreg-esbcg8bgekgrabfu.canadacentral-01.azurewebsites.net/api';
 
   useEffect(() => {
     const userData = localStorage.getItem('registeredUser');
@@ -253,200 +253,204 @@ const Teams = () => {
   }
 
   return (
-    <div className="teams-container">
-      <div className="teams-header">
-        <h1><FaUsers /> Team Management</h1>
-        <p>Create, join, and manage teams for Summer Open 2025</p>
-      </div>
+    <div className="teams-page">
+      <div className="container">
+        <div className="teams-content">
+          <div className="teams-header">
+            <h1><FaUsers /> Team Management</h1>
+            <p>Create, join, and manage teams for Summer Open 2025</p>
+          </div>
 
-      {/* Messages */}
-      {error && (
-        <div className="message error">
-          {error}
-          <button onClick={clearMessages} className="close-btn">×</button>
-        </div>
-      )}
-      {success && (
-        <div className="message success">
-          {success}
-          <button onClick={clearMessages} className="close-btn">×</button>
-        </div>
-      )}
-
-      {/* User's Current Team Status */}
-      <div className="current-team-status">
-        {userTeam ? (
-          <div className="team-status">
-            <h3>Your Team: {userTeam.teamName}</h3>
-            <p>Role: <span className={`role ${userTeam.role}`}>
-              {userTeam.role === 'leader' && <FaCrown />} {userTeam.role}
-            </span></p>
-            <div className="team-actions">
-              {userTeam.role === 'leader' ? (
-                <>
-                  <button 
-                    onClick={() => setShowTransferForm(true)}
-                    className="btn btn-secondary"
-                  >
-                    <FaExchangeAlt /> Transfer Leadership
-                  </button>
-                  <button 
-                    onClick={() => deleteTeam(userTeam.teamID)}
-                    className="btn btn-danger"
-                  >
-                    <FaTrash /> Delete Team
-                  </button>
-                </>
-              ) : (
-                <button 
-                  onClick={() => leaveTeam(userTeam.teamID)}
-                  className="btn btn-danger"
-                >
-                  <FaUserMinus /> Leave Team
-                </button>
-              )}
+          {/* Messages */}
+          {error && (
+            <div className="message error">
+              {error}
+              <button onClick={clearMessages} className="close-btn">×</button>
             </div>
-          </div>
-        ) : (
-          <div className="no-team">
-            <p>You're not currently on a team.</p>
-            <button 
-              onClick={() => setShowCreateForm(true)}
-              className="btn btn-primary"
-            >
-              <FaPlus /> Create Team
-            </button>
-          </div>
-        )}
-      </div>
+          )}
+          {success && (
+            <div className="message success">
+              {success}
+              <button onClick={clearMessages} className="close-btn">×</button>
+            </div>
+          )}
 
-      {/* Transfer Leadership Form */}
-      {showTransferForm && (
-        <div className="modal-overlay">
-          <div className="modal">
-            <h3>Transfer Leadership</h3>
-            <form onSubmit={transferLeadership}>
-              <div className="form-group">
-                <label>New Leader's Email:</label>
-                <input
-                  type="email"
-                  value={transferEmail}
-                  onChange={(e) => setTransferEmail(e.target.value)}
-                  required
-                  placeholder="Enter team member's email"
-                />
+          {/* User's Current Team Status */}
+          <div className="current-team-status">
+            {userTeam ? (
+              <div className="team-status">
+                <h3>Your Team: {userTeam.teamName}</h3>
+                <p>Role: <span className={`role ${userTeam.role}`}>
+                  {userTeam.role === 'leader' && <FaCrown />} {userTeam.role}
+                </span></p>
+                <div className="team-actions">
+                  {userTeam.role === 'leader' ? (
+                    <>
+                      <button 
+                        onClick={() => setShowTransferForm(true)}
+                        className="btn btn-secondary"
+                      >
+                        <FaExchangeAlt /> Transfer Leadership
+                      </button>
+                      <button 
+                        onClick={() => deleteTeam(userTeam.teamID)}
+                        className="btn btn-danger"
+                      >
+                        <FaTrash /> Delete Team
+                      </button>
+                    </>
+                  ) : (
+                    <button 
+                      onClick={() => leaveTeam(userTeam.teamID)}
+                      className="btn btn-danger"
+                    >
+                      <FaUserMinus /> Leave Team
+                    </button>
+                  )}
+                </div>
               </div>
-              <div className="form-actions">
-                <button type="submit" className="btn btn-primary">
-                  Transfer Leadership
-                </button>
+            ) : (
+              <div className="no-team">
+                <p>You're not currently on a team.</p>
                 <button 
-                  type="button" 
-                  onClick={() => setShowTransferForm(false)}
-                  className="btn btn-secondary"
+                  onClick={() => setShowCreateForm(true)}
+                  className="btn btn-primary"
                 >
-                  Cancel
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
-
-      {/* Create Team Form */}
-      {showCreateForm && (
-        <div className="modal-overlay">
-          <div className="modal">
-            <h3>Create New Team</h3>
-            <form onSubmit={createTeam}>
-              <div className="form-group">
-                <label>Team Name:</label>
-                <input
-                  type="text"
-                  value={newTeamName}
-                  onChange={(e) => setNewTeamName(e.target.value)}
-                  required
-                  maxLength="255"
-                  placeholder="Enter team name"
-                />
-              </div>
-              <div className="form-actions">
-                <button type="submit" className="btn btn-primary">
                   <FaPlus /> Create Team
                 </button>
-                <button 
-                  type="button" 
-                  onClick={() => setShowCreateForm(false)}
-                  className="btn btn-secondary"
-                >
-                  Cancel
-                </button>
               </div>
-            </form>
+            )}
           </div>
-        </div>
-      )}
 
-      {/* Search and Filter */}
-      <div className="teams-controls">
-        <div className="search-bar">
-          <FaSearch />
-          <input
-            type="text"
-            placeholder="Search teams..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-        </div>
-      </div>
-
-      {/* Teams List */}
-      <div className="teams-grid">
-        {filteredTeams.length === 0 ? (
-          <div className="no-teams">
-            {searchTerm ? 'No teams match your search.' : 'No teams created yet.'}
-          </div>
-        ) : (
-          filteredTeams.map((team) => (
-            <div key={team.teamID} className="team-card">
-              <div className="team-header">
-                <h3>{team.teamName}</h3>
-                <span className="member-count">
-                  <FaUsers /> {team.memberCount} member{team.memberCount !== 1 ? 's' : ''}
-                </span>
-              </div>
-              
-              <div className="team-info">
-                <p><strong>Leader:</strong> {team.teamLeaderName}</p>
-                <p><strong>Created:</strong> {new Date(team.createdAt).toLocaleDateString()}</p>
-              </div>
-
-              <div className="team-members">
-                <h4>Members:</h4>
-                <ul>
-                  {team.members.map((member) => (
-                    <li key={member.memberID} className={`member ${member.role}`}>
-                      {member.role === 'leader' && <FaCrown />}
-                      {member.name}
-                      <span className="member-role">({member.role})</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              <div className="team-actions">
-                {!userTeam && (
-                  <button 
-                    onClick={() => joinTeam(team.teamID)}
-                    className="btn btn-primary"
-                  >
-                    <FaUserPlus /> Join Team
-                  </button>
-                )}
+          {/* Transfer Leadership Form */}
+          {showTransferForm && (
+            <div className="modal-overlay">
+              <div className="modal">
+                <h3>Transfer Leadership</h3>
+                <form onSubmit={transferLeadership}>
+                  <div className="form-group">
+                    <label>New Leader's Email:</label>
+                    <input
+                      type="email"
+                      value={transferEmail}
+                      onChange={(e) => setTransferEmail(e.target.value)}
+                      required
+                      placeholder="Enter team member's email"
+                    />
+                  </div>
+                  <div className="form-actions">
+                    <button type="submit" className="btn btn-primary">
+                      Transfer Leadership
+                    </button>
+                    <button 
+                      type="button" 
+                      onClick={() => setShowTransferForm(false)}
+                      className="btn btn-secondary"
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </form>
               </div>
             </div>
-          ))
-        )}
+          )}
+
+          {/* Create Team Form */}
+          {showCreateForm && (
+            <div className="modal-overlay">
+              <div className="modal">
+                <h3>Create New Team</h3>
+                <form onSubmit={createTeam}>
+                  <div className="form-group">
+                    <label>Team Name:</label>
+                    <input
+                      type="text"
+                      value={newTeamName}
+                      onChange={(e) => setNewTeamName(e.target.value)}
+                      required
+                      maxLength="255"
+                      placeholder="Enter team name"
+                    />
+                  </div>
+                  <div className="form-actions">
+                    <button type="submit" className="btn btn-primary">
+                      <FaPlus /> Create Team
+                    </button>
+                    <button 
+                      type="button" 
+                      onClick={() => setShowCreateForm(false)}
+                      className="btn btn-secondary"
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          )}
+
+          {/* Search and Filter */}
+          <div className="teams-controls">
+            <div className="search-bar">
+              <FaSearch />
+              <input
+                type="text"
+                placeholder="Search teams..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+            </div>
+          </div>
+
+          {/* Teams List */}
+          <div className="teams-grid">
+            {filteredTeams.length === 0 ? (
+              <div className="no-teams">
+                {searchTerm ? 'No teams match your search.' : 'No teams created yet.'}
+              </div>
+            ) : (
+              filteredTeams.map((team) => (
+                <div key={team.teamID} className="team-card">
+                  <div className="team-header">
+                    <h3>{team.teamName}</h3>
+                    <span className="member-count">
+                      <FaUsers /> {team.memberCount} member{team.memberCount !== 1 ? 's' : ''}
+                    </span>
+                  </div>
+                  
+                  <div className="team-info">
+                    <p><strong>Leader:</strong> {team.teamLeaderName}</p>
+                    <p><strong>Created:</strong> {new Date(team.createdAt).toLocaleDateString()}</p>
+                  </div>
+
+                  <div className="team-members">
+                    <h4>Members:</h4>
+                    <ul>
+                      {team.members.map((member) => (
+                        <li key={member.memberID} className={`member ${member.role}`}>
+                          {member.role === 'leader' && <FaCrown />}
+                          {member.name}
+                          <span className="member-role">({member.role})</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  <div className="team-actions">
+                    {!userTeam && (
+                      <button 
+                        onClick={() => joinTeam(team.teamID)}
+                        className="btn btn-primary"
+                      >
+                        <FaUserPlus /> Join Team
+                      </button>
+                    )}
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
+        </div>
       </div>
     </div>
   );
