@@ -30,7 +30,7 @@ const Teams = () => {
   const [transferEmail, setTransferEmail] = useState('');
   const [showTransferForm, setShowTransferForm] = useState(false);
 
-  const API_BASE = 'https://summeropenreg-esbcg8bgekgrabfu.canadacentral-01.azurewebsites.net/api';
+  const API_BASE = 'https://summeropenreg-esbcg8bgekgrabfu.canadacentral-01.azurewebsites.net/api/';
 
   useEffect(() => {
     const userData = localStorage.getItem('registeredUser');
