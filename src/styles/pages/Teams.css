@@ -340,14 +340,40 @@
   color: #744210;
 }
 
-.member svg {
-  margin-right: 0.5rem;
+.member-info {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.member-info svg {
+  color: #d69e2e;
 }
 
 .member-role {
   font-size: 0.8rem;
   color: #718096;
   font-style: italic;
+}
+
+.btn-remove-member {
+  background-color: #f56565;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 16px;
+  line-height: 1;
+  transition: background-color 0.2s;
+}
+
+.btn-remove-member:hover {
+  background-color: #e53e3e;
 }
 
 .no-teams {

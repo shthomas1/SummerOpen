@@ -29,6 +29,8 @@ const Teams = () => {
   const [teamToJoin, setTeamToJoin] = useState('');
   const [transferEmail, setTransferEmail] = useState('');
   const [showTransferForm, setShowTransferForm] = useState(false);
+  const [showEditTeam, setShowEditTeam] = useState(false);
+  const [editingTeam, setEditingTeam] = useState(null);
 
   const API_BASE = 'https://summeropenreg-esbcg8bgekgrabfu.canadacentral-01.azurewebsites.net/api';
 
@@ -128,11 +130,27 @@ const Teams = () => {
         setSuccess('Successfully joined team!');
         setTimeout(() => setSuccess(''), 3000);
       } else {
-        const errorData = await response.json();
-        setError(errorData.message || 'Failed to join team');
+        // Better error handling - let's see what the API actually sends
+        const responseText = await response.text();
+        console.log('API Error Response:', responseText);
+        
+        let errorMessage = 'Failed to join team';
+        try {
+          const errorData = JSON.parse(responseText);
+          console.log('Parsed error data:', errorData);
+          errorMessage = errorData.message || errorData.title || errorData.error || errorMessage;
+        } catch (parseError) {
+          console.log('Could not parse error response as JSON');
+          errorMessage = responseText || errorMessage;
+        }
+        
+        setError(errorMessage);
+        setTimeout(() => setError(''), 5000);
       }
     } catch (err) {
-      setError('Error joining team');
+      console.error('Network error joining team:', err);
+      setError('Network error joining team');
+      setTimeout(() => setError(''), 5000);
     }
   };
 
@@ -192,6 +210,66 @@ const Teams = () => {
     }
   };
 
+  const removeMember = async (teamId, memberEmail) => {
+    if (!window.confirm('Are you sure you want to remove this member from the team?')) return;
+
+    try {
+      const response = await fetch(`${API_BASE}/Teams/${teamId}/leave`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          userEmail: memberEmail
+        }),
+      });
+
+      if (response.ok) {
+        // Refresh teams to get updated member list
+        fetchTeams();
+        setSuccess('Member removed successfully!');
+        setTimeout(() => setSuccess(''), 3000);
+      } else {
+        const responseText = await response.text();
+        let errorMessage = 'Failed to remove member';
+        try {
+          const errorData = JSON.parse(responseText);
+          errorMessage = errorData.message || errorData.title || errorMessage;
+        } catch (parseError) {
+          errorMessage = responseText || errorMessage;
+        }
+        setError(errorMessage);
+        setTimeout(() => setError(''), 5000);
+      }
+    } catch (err) {
+      console.error('Error removing member:', err);
+      setError('Error removing member');
+      setTimeout(() => setError(''), 5000);
+    }
+  };
+
+  const editTeam = (team) => {
+    setEditingTeam(team);
+    setNewTeamName(team.teamName);
+    setShowEditTeam(true);
+  };
+
+  const updateTeam = async (e) => {
+    e.preventDefault();
+    if (!newTeamName.trim() || !editingTeam) return;
+
+    try {
+      // Note: You'll need to add an update endpoint to your API
+      // For now, this is a placeholder
+      setError('Team editing is not yet implemented in the API');
+      setShowEditTeam(false);
+      setEditingTeam(null);
+      setNewTeamName('');
+    } catch (err) {
+      setError('Error updating team');
+    }
+  };
+
   const transferLeadership = async (e) => {
     e.preventDefault();
     if (!transferEmail.trim() || !userTeam) return;
@@ -238,16 +316,24 @@ const Teams = () => {
 
   if (loading) {
     return (
-      <div className="teams-container">
-        <div className="loading">Loading teams...</div>
+      <div className="teams-page">
+        <div className="container">
+          <div className="teams-content">
+            <div className="loading">Loading teams...</div>
+          </div>
+        </div>
       </div>
     );
   }
 
   if (!currentUser) {
     return (
-      <div className="teams-container">
-        <div className="error">Please log in to manage teams.</div>
+      <div className="teams-page">
+        <div className="container">
+          <div className="teams-content">
+            <div className="error">Please log in to manage teams.</div>
+          </div>
+        </div>
       </div>
     );
   }
@@ -355,6 +441,44 @@ const Teams = () => {
             </div>
           )}
 
+          {/* Edit Team Form */}
+          {showEditTeam && (
+            <div className="modal-overlay">
+              <div className="modal">
+                <h3>Edit Team</h3>
+                <form onSubmit={updateTeam}>
+                  <div className="form-group">
+                    <label>Team Name:</label>
+                    <input
+                      type="text"
+                      value={newTeamName}
+                      onChange={(e) => setNewTeamName(e.target.value)}
+                      required
+                      maxLength="255"
+                      placeholder="Enter team name"
+                    />
+                  </div>
+                  <div className="form-actions">
+                    <button type="submit" className="btn btn-primary">
+                      <FaEdit /> Update Team
+                    </button>
+                    <button 
+                      type="button" 
+                      onClick={() => {
+                        setShowEditTeam(false);
+                        setEditingTeam(null);
+                        setNewTeamName('');
+                      }}
+                      className="btn btn-secondary"
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          )}
+
           {/* Create Team Form */}
           {showCreateForm && (
             <div className="modal-overlay">
@@ -428,21 +552,46 @@ const Teams = () => {
                     <ul>
                       {team.members.map((member) => (
                         <li key={member.memberID} className={`member ${member.role}`}>
-                          {member.role === 'leader' && <FaCrown />}
-                          {member.name}
-                          <span className="member-role">({member.role})</span>
+                          <div className="member-info">
+                            {member.role === 'leader' && <FaCrown />}
+                            {member.name}
+                            <span className="member-role">({member.role})</span>
+                          </div>
+                          {/* Show remove button for team leaders, but not for themselves */}
+                          {userTeam?.role === 'leader' && 
+                           userTeam.teamID === team.teamID && 
+                           member.role !== 'leader' && (
+                            <button 
+                              onClick={() => removeMember(team.teamID, member.email)}
+                              className="btn-remove-member"
+                              title="Remove member"
+                            >
+                              ×
+                            </button>
+                          )}
                         </li>
                       ))}
                     </ul>
                   </div>
 
                   <div className="team-actions">
+                    {/* Show join button only if user is not on any team */}
                     {!userTeam && (
                       <button 
                         onClick={() => joinTeam(team.teamID)}
                         className="btn btn-primary"
                       >
                         <FaUserPlus /> Join Team
+                      </button>
+                    )}
+                    
+                    {/* Show edit button for team leaders */}
+                    {userTeam?.role === 'leader' && userTeam.teamID === team.teamID && (
+                      <button 
+                        onClick={() => editTeam(team)}
+                        className="btn btn-secondary"
+                      >
+                        <FaEdit /> Edit Team
                       </button>
                     )}
                   </div>
