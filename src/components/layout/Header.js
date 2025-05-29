@@ -5,6 +5,7 @@ import {
   FaSignOutAlt,
   FaCalendarAlt,
   FaUserEdit,
+  FaUsers, // Add this import for teams icon
 } from "react-icons/fa";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import Countdown from "../ui/Countdown";
@@ -153,6 +154,11 @@ const Header = () => {
     navigate("/update-profile");
   };
 
+  const handleTeamsClick = () => {
+    navigate("/teams");
+    if (isMenuOpen) toggleMenu();
+  };
+
   return (
     <header className={`header ${isScrolled ? "scrolled" : ""}`}>
       <div className="container">
@@ -182,6 +188,14 @@ const Header = () => {
                 <FaCalendarAlt />
                 <span>Schedule</span>
               </button>
+
+              {/* Teams Button - Only show when logged in */}
+              {isLoggedIn && (
+                <button onClick={handleTeamsClick} className="nav-cta">
+                  <FaUsers />
+                  <span>Teams</span>
+                </button>
+              )}
 
               {isLoggedIn ? (
                 <div className="user-profile" id="user-profile-dropdown">

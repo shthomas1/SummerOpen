@@ -3,9 +3,8 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "styled-components";
 import "./styles/globals.css";
 import theme from "./styles/Theme";
-import ThankYou from './pages/ThankYou';
-import UpdateProfile from './pages/UpdateProfile'; // Adjust path if it's not in 'pages'
-
+import ThankYou from "./pages/ThankYou";
+import UpdateProfile from "./pages/UpdateProfile"; // Adjust path if it's not in 'pages'
 
 // Layout components
 import Header from "./components/layout/Header";
@@ -23,6 +22,7 @@ import Sponsors from "./components/sections/Sponsors";
 
 // Pages
 import Register from "./pages/Register";
+import Teams from "./pages/Teams";
 
 // HomePage component that combines all sections
 const HomePage = () => (
@@ -33,7 +33,6 @@ const HomePage = () => (
     <Schedule />
     <Benefits />
     <Team />
-    <FAQ />
     <Sponsors />
   </>
 );
@@ -48,7 +47,7 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/thank-you" element={<ThankYou />} />{" "}
           <Route path="/update-profile" element={<UpdateProfile />} />
-
+          <Route path="/teams" element={<Teams />} />
         </Routes>
         <Footer />
       </Router>
