@@ -16,12 +16,10 @@ export const teamData = [
     name: "Zarcotech",
     role: "Discord Administrator",
     bio: "Egyptian student developer passionate about UI/UX design",
-    image: "/images/seanthomas.jpg",
+    image: "/images/zarcotech.jpg",
     category: "organizer",
     social: {
-      linkedin: "https://linkedin.com/in/seanhthomas",
-      website: "https://seanhthomas.com",
-      github: "https://github.com/shthomas1/",
+      website: "https://zarcotech.xyz",
     },
   },
 
