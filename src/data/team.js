@@ -12,16 +12,6 @@ export const teamData = [
       github: "https://github.com/shthomas1/",
     },
   },
-  {
-    name: "Filip Sysak",
-    role: "Organizer",
-    bio: "Self-taught front-end developer from Poland",
-    category: "organizer",
-    social: {
-      linkedin: "https://linkedin.com/in/filipsysak",
-      website: "https://filyys.dev",
-    },
-  },
 
   // Judges
   {
@@ -45,7 +35,7 @@ export const teamData = [
       website: "https://www.richardlechko.com/",
     },
   },
-    {
+  {
     name: "Matthew Fickling",
     role: "Judge",
     bio: "Assistant Manager @ Whitefab, Inc. | Univ of Alabama Management Information Systems Graduate",
@@ -55,6 +45,92 @@ export const teamData = [
       linkedin: "https://www.linkedin.com/in/matthew-fickling/",
     },
   },
+  {
+    name: "Tara Little",
+    role: "Judge",
+    bio: "Integration Analyst @ HCA Healthcare",
+    image: "/images/taralittle.jpg",
+    category: "judge",
+    social: {
+      linkedin: "https://www.linkedin.com/in/tara-little-383b8a26/",
+    },
+  },
+  {
+    name: "Filip Sysak",
+    role: "Judge",
+    bio: "Self-taught front-end developer from Poland",
+    image: "/images/filipsysak.jpg",
+    category: "judge",
+    social: {
+      linkedin: "https://www.linkedin.com/in/filipsysak/",
+      website: "https://filyys.dev/"
+    },
+  },
+  {
+    name: "Rama Ayalasomayajula",
+    role: "Judge",
+    bio: "Director @ Tiger Analytics",
+    image: "/images/ramaa.jpg",
+    category: "judge",
+    social: {
+      linkedin: "https://www.linkedin.com/in/ramaayalasomayajula/",
+    },
+  },
+  {
+    name: "Santhosh Srinivasan",
+    role: "Judge",
+    bio: "Senior Enterprise Architect @ AWS",
+    image: "/images/santhoshs.jpg",
+    category: "judge",
+    social: {
+      linkedin: "https://www.linkedin.com/in/santhosh-srinivasan-5a10bb27/",
+    },
+  },
+
+  {
+    name: "Sreeja Apparaju",
+    role: "Judge",
+    bio: "ML Engineer @ Snap Inc.",
+    image: "/images/sreejaa.jpg",
+    category: "judge",
+    social: {
+      linkedin: "https://www.linkedin.com/in/sreejaapparaju/",
+    },
+  },
+
+  {
+    name: "Prashanthi Matam",
+    role: "Judge",
+    bio: "Senior Software Engineer @ Discover Financial Services",
+    image: "/images/prashantim.jpg",
+    category: "judge",
+    social: {
+      linkedin: "https://www.linkedin.com/in/prashanthimatam/",
+    },
+  },
+
+  {
+    name: "Raghav Patlolla",
+    role: "Judge",
+    bio: "Frontend Developer @ Mastech Digital",
+    image: "/images/raghavp.jpg",
+    category: "judge",
+    social: {
+      linkedin: "https://www.linkedin.com/in/raghav-patlolla-9ab9bb161/",
+    },
+  },
+
+  {
+    name: "Ravi Jaiswal",
+    role: "Judge",
+    bio: "ERP Consultant @ Assa Abloy Group",
+    image: "/images/ravij.jpg",
+    category: "judge",
+    social: {
+      linkedin: "https://www.linkedin.com/in/ravi-jaiswal-10ba41234/",
+    },
+  },
+
   // {
   //   name: "Anthony Sistilli",
   //   role: "Content Creator & Judge",
