@@ -12,12 +12,24 @@ export const teamData = [
       github: "https://github.com/shthomas1/",
     },
   },
+    {
+    name: "Zarcotech",
+    role: "Discord Administrator",
+    bio: "Egyptian student developer passionate about UI/UX design",
+    image: "/images/seanthomas.jpg",
+    category: "organizer",
+    social: {
+      linkedin: "https://linkedin.com/in/seanhthomas",
+      website: "https://seanhthomas.com",
+      github: "https://github.com/shthomas1/",
+    },
+  },
 
   // Judges
   {
     name: "Sherlenthia Brazzley",
     role: "Judge & Mentor",
-    bio: "Associate Systems Engineer @ Autozone. I am a dedicated Full Stack Developer and I love public speaking. I am passionate about technology and helping others.",
+    bio: "Associate Systems Engineer @ Autozone",
     image: "/images/sherlenthiabrazzley.jpg",
     category: "judge",
     social: {
@@ -27,7 +39,7 @@ export const teamData = [
   {
     name: "Richard Lechko",
     role: "Judge",
-    bio: "3rd year IT major at DePaul University (Chicago, IL). Currently an IT intern.",
+    bio: "3rd year IT major at DePaul University",
     image: "/images/richardlechko.jpg",
     category: "judge",
     social: {
@@ -38,7 +50,7 @@ export const teamData = [
   {
     name: "Matthew Fickling",
     role: "Judge",
-    bio: "Assistant Manager @ Whitefab, Inc. | Univ of Alabama Management Information Systems Graduate",
+    bio: "Assistant Manager @ Whitefab, Inc.",
     image: "/images/matthewfickling.jpg",
     category: "judge",
     social: {
