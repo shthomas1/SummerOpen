@@ -112,7 +112,7 @@ export const teamData = [
     name: "Prashanthi Matam",
     role: "Judge",
     bio: "Senior Software Engineer @ Discover Financial Services",
-    image: "/images/prashantim.jpg",
+    image: "/images/prashanthim.jpg",
     category: "judge",
     social: {
       linkedin: "https://www.linkedin.com/in/prashanthimatam/",
