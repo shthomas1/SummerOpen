@@ -77,13 +77,13 @@ export const teamData = [
     },
   },
   {
-    name: "Rama Ayalasomayajula",
+    name: "Ramakanth Ayalasomayajula",
     role: "Judge",
-    bio: "Director @ Tiger Analytics",
+    bio: "Lead Software Engineer @ Captial Vacations",
     image: "/images/ramaa.jpg",
     category: "judge",
     social: {
-      linkedin: "https://www.linkedin.com/in/ramaayalasomayajula/",
+      linkedin: "https://www.linkedin.com/in/ramakantha/",
     },
   },
   {
