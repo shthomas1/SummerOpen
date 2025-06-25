@@ -10,11 +10,6 @@ export const scheduleData = [
     description: 'Teams start working on their projects with mentors available for guidance throughout the process.'
   },
   {
-    time: 'June 28, 12:00 PM',
-    title: 'Technical Workshops',
-    description: 'Optional sessions on various technologies and tools to help participants enhance their projects.'
-  },
-  {
     time: 'June 28, 3:00 PM - 9:00 PM',
     title: 'Progress Check-in',
     description: 'Teams will have time share their progress and receive valuable feedback from our mentors and judges.'
@@ -26,7 +21,7 @@ export const scheduleData = [
   },
   {
     time: 'June 29, 9:00 PM',
-    title: 'Winners announcement',
-    description: 'Winners announcement, prizes distribution, and closing remarks to conclude the event.'
+    title: 'Winners announcement (tentative!)',
+    description: 'Winners announcement, and closing remarks to conclude the event.'
   }
 ];

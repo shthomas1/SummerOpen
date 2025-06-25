@@ -15,6 +15,7 @@ import Hero from "./components/sections/Hero";
 import EventDetails from "./components/sections/EventDetails";
 import About from "./components/sections/About";
 import Schedule from "./components/sections/Schedule";
+import Prompts from "./components/sections/Prompts";
 import Benefits from "./components/sections/Benefits";
 import Team from "./components/sections/Team";
 import FAQ from "./components/sections/FAQ";
@@ -31,6 +32,7 @@ const HomePage = () => (
     <EventDetails />
     <About />
     <Schedule />
+    <Prompts />
     <Benefits />
     <Team />
     <Sponsors />
@@ -48,6 +50,7 @@ function App() {
           <Route path="/thank-you" element={<ThankYou />} />{" "}
           <Route path="/update-profile" element={<UpdateProfile />} />
           <Route path="/teams" element={<Teams />} />
+          <Route path="/prompts" element={<Prompts />} />
         </Routes>
         <Footer />
       </Router>
