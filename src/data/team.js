@@ -140,16 +140,15 @@ export const teamData = [
       linkedin: "https://www.linkedin.com/in/ravi-jaiswal-10ba41234/",
     },
   },
+    {
+    name: "Akhil Sai Devunoori",
+    role: "Judge",
+    bio: "Software Engineer @ Expedia",
+    image: "/images/akhilsd.jpg",
+    category: "judge",
+    social: {
+      linkedin: "https://www.linkedin.com/in/akhil-sai-devunoori/",
+    },
+  },
 
-  // {
-  //   name: "Anthony Sistilli",
-  //   role: "Content Creator & Judge",
-  //   bio: "Founder @ Fallom.dev & Content Creator",
-  //   image: "/images/asistilli.jpg",
-  //   category: "judge",
-  //   social: {
-  //     linkedin: "https://www.linkedin.com/in/asistilli/",
-  //     website: "https://www.youtube.com/@AnthonySistilli",
-  //   },
-  // },
 ];
