@@ -12,7 +12,7 @@ export const promptsData = [
     title: 'Data Analytics/Data Science Challenge',
     description: 'Manufacturing-focused data analytics project!',
     difficulty: '4/5',
-    driveLink: 'https://docs.google.com/document/d/1H4kwBKyE8NyNHxszD9AWe1UbYiAzSVfSDZpBqlFERH8/edit?usp=sharing'
+    driveLink: 'https://drive.google.com/drive/folders/1N9LcjulP46fFIjh78QPJxPtpDfYm1sQ8?usp=drive_link'
   },
   {
     id: 3,
