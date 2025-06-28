@@ -70,7 +70,7 @@ const Prompts = () => {
                                         rel="noopener noreferrer"
                                         style={{ pointerEvents: prompt.driveLink.includes('PLACEHOLDER') ? 'none' : 'auto' }}
                                     >
-                                        Drive Link (Not active yet!)
+                                        Drive Link
                                     </a>
                                 </div>
 
@@ -80,7 +80,7 @@ const Prompts = () => {
                                         <div className="coming-soon-text">
                                             Coming Soon!<br />
                                             <span className="coming-soon-subtext">
-                                                Full details will be available soon
+                                                
                                             </span>
                                         </div>
                                     </div>
