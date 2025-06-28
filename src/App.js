@@ -46,7 +46,6 @@ function App() {
         <Header />
         <Routes>
           <Route path="/" element={<HomePage />} />
-          <Route path="/register" element={<Register />} />
           <Route path="/thank-you" element={<ThankYou />} />{" "}
           <Route path="/update-profile" element={<UpdateProfile />} />
           <Route path="/teams" element={<Teams />} />

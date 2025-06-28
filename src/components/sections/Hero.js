@@ -23,11 +23,11 @@ const Hero = () => {
             Join us for an unforgettable weekend of innovation!
           </p>
 
-          <div className="hero-cta-group">
+          {/* <div className="hero-cta-group">
             <Link to="/register" className="register-button register-button-large">
               Register Now
             </Link>
-          </div>
+          </div> */}
 
           <div className="hero-stats">
             <div className="hero-stat">

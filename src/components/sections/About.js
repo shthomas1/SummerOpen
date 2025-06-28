@@ -96,7 +96,7 @@ const About = () => {
             </AboutPoint>
           </AboutPoints>
 
-          <Button href="/register" variant="primary" className="register-button">Join the Challenge</Button>
+          {/* <Button href="/register" variant="primary" className="register-button">Join the Challenge</Button> */}
         </motion.div>
       </AboutContainer>
     </AboutSection>
