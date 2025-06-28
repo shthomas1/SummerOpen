@@ -18,10 +18,22 @@ const Header = () => {
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [showProfileMenu, setShowProfileMenu] = useState(false);
+  const [userTimeZone, setUserTimeZone] = useState(null);
 
   const location = useLocation();
   const navigate = useNavigate();
   const isHomePage = location.pathname === "/";
+
+  // Get user's time zone
+  useEffect(() => {
+    try {
+      const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+      setUserTimeZone(timeZone);
+    } catch (error) {
+      console.warn("Could not detect user timezone, using UTC", error);
+      setUserTimeZone("UTC");
+    }
+  }, []);
 
   useEffect(() => {
     const checkLoginStatus = () => {
@@ -161,6 +173,48 @@ const Header = () => {
     if (showProfileMenu) setShowProfileMenu(false);
   };
 
+  // Function to get the appropriate target date (start or end time)
+  const getTargetDate = () => {
+    const startTime = "2025-06-28T06:00:00-05:00"; // June 28, 6:00 AM CDT
+    const endTime = "2025-06-29T18:00:00-05:00";   // June 29, 6:00 PM CDT
+    
+    const now = new Date();
+    const startDate = new Date(startTime);
+    
+    // If current time is before start time, countdown to start
+    // If current time is after start time, countdown to end
+    return now < startDate ? startTime : endTime;
+  };
+
+  // Function to determine if we're counting down to start or end
+  const getCountdownType = () => {
+    const startTime = "2025-06-28T06:00:00-05:00";
+    const now = new Date();
+    const startDate = new Date(startTime);
+    
+    return now < startDate ? "start" : "end";
+  };
+
+  // Function to get a human-readable event time description
+  const getEventTimeDescription = () => {
+    if (!userTimeZone) return "";
+    
+    const targetDate = new Date(getTargetDate());
+    const localTime = targetDate.toLocaleString("en-US", {
+      timeZone: userTimeZone,
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      hour: 'numeric',
+      minute: '2-digit',
+      timeZoneName: 'short'
+    });
+    
+    const countdownType = getCountdownType();
+    return `${countdownType === 'start' ? 'Starts' : 'Ends'}: ${localTime}`;
+  };
+
   return (
     <header className={`header ${isScrolled ? "scrolled" : ""}`}>
       <div className="container">
@@ -173,7 +227,14 @@ const Header = () => {
           </div>
 
           <div className="center-section">
-            <Countdown targetDate="2025-06-28T06:00:00" header={true} />
+            {userTimeZone && (
+              <Countdown 
+                targetDate={getTargetDate()} 
+                header={true}
+                userTimeZone={userTimeZone}
+                countdownType={getCountdownType()}
+              />
+            )}
           </div>
 
           <div className="right-section">
