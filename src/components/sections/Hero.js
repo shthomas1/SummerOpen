@@ -19,8 +19,9 @@ const Hero = () => {
             Summer Open <span>Hackathon</span>
           </h1>
           <p className="hero-subtitle">
-            A 36-hour virtual coding event where creativity meets technology.
-            Join us for an unforgettable weekend of innovation!
+            We ran a successful hackathon with over 90 competitors! The
+            projects were incredible demonstrations of creativity and skill.
+            Explore the winning submissions below.
           </p>
 
           {/* <div className="hero-cta-group">

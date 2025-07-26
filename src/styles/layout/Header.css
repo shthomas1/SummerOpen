@@ -276,10 +276,6 @@ a.nav-cta {
   cursor: not-allowed;
 }
 
-.schedule-btn:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 4px 8px rgba(247, 37, 133, 0.3);
-}
 
 /* Login overlay and form */
 .login-overlay {
@@ -503,8 +499,7 @@ a.nav-cta {
   }
   
   .logout-btn,
-  .login-link,
-  .schedule-btn {
+  .login-link {
     width: 100%;
     justify-content: center;
   }

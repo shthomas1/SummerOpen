@@ -3,7 +3,6 @@ import {
   FaBars,
   FaGithub,
   FaSignOutAlt,
-  FaCalendarAlt,
   FaUserEdit,
   FaUsers,
 } from "react-icons/fa";
@@ -126,41 +125,6 @@ const Header = () => {
     navigate("/");
   };
 
-  const handleScheduleClick = () => {
-    if (isHomePage) {
-      // If already on homepage, scroll to schedule section
-      const scheduleSection = document.getElementById("schedule");
-      if (scheduleSection) {
-        scheduleSection.scrollIntoView({ behavior: "smooth" });
-      }
-    } else {
-      // If on another page, navigate to homepage and then scroll to schedule
-      // Store a flag in sessionStorage to indicate we need to scroll to schedule
-      sessionStorage.setItem("scrollToSchedule", "true");
-      navigate("/");
-    }
-
-    // Close mobile menu and profile dropdown if open
-    if (isMenuOpen) toggleMenu();
-    if (showProfileMenu) setShowProfileMenu(false);
-  };
-
-  // Add this effect to your component to handle the scroll after navigation
-  useEffect(() => {
-    // Check if we need to scroll to schedule after navigation
-    if (isHomePage && sessionStorage.getItem("scrollToSchedule") === "true") {
-      // Remove the flag
-      sessionStorage.removeItem("scrollToSchedule");
-
-      // Give time for the page to render, then scroll
-      setTimeout(() => {
-        const scheduleSection = document.getElementById("schedule");
-        if (scheduleSection) {
-          scheduleSection.scrollIntoView({ behavior: "smooth" });
-        }
-      }, 100); // Delay to ensure the section is rendered
-    }
-  }, [isHomePage]);
 
   const handleUpdateProfile = () => {
     setShowProfileMenu(false);
@@ -270,10 +234,6 @@ const Header = () => {
                   {/* Profile dropdown menu with all user actions */}
                   {showProfileMenu && (
                     <div className="profile-dropdown">
-                      <button onClick={handleScheduleClick} className="dropdown-item">
-                        <FaCalendarAlt />
-                        <span>Schedule</span>
-                      </button>
                       <button onClick={handleTeamsClick} className="dropdown-item">
                         <FaUsers />
                         <span>Teams</span>
@@ -294,11 +254,6 @@ const Header = () => {
                 </div>
               ) : (
                 <>
-                  {/* Schedule Button - Show for non-logged in users */}
-                  <button onClick={handleScheduleClick} className="nav-cta">
-                    <FaCalendarAlt />
-                    <span>Schedule</span>
-                  </button>
                   <button
                     onClick={handleGitHubLogin}
                     className="login-link"
@@ -316,6 +271,13 @@ const Header = () => {
                   </Link>
                 </>
               )}
+              <Link
+                to="/winners"
+                className="nav-cta"
+                onClick={() => isMenuOpen && toggleMenu()}
+              >
+                Winners
+              </Link>
             </div>
           </div>
         </div>
