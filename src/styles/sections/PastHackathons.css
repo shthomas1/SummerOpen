@@ -12,6 +12,8 @@
 
 .carousel-item {
   text-align: center;
+  width: 220px;
+  position: relative;
 }
 
 .carousel-item img {
@@ -24,4 +26,20 @@
   margin-top: 1rem;
   font-size: 1.1rem;
   font-weight: 600;
+}
+
+.view-button {
+  position: absolute;
+  bottom: 0.5rem;
+  right: 0.5rem;
+  background-color: var(--color-primary);
+  color: #fff;
+  padding: 0.25rem 0.75rem;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  text-decoration: none;
+}
+
+.view-button:hover {
+  opacity: 0.9;
 }
