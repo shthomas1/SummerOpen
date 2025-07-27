@@ -6,6 +6,7 @@ import theme from "./styles/Theme";
 import ThankYou from "./pages/ThankYou";
 import UpdateProfile from "./pages/UpdateProfile"; // Adjust path if it's not in 'pages'
 import WinnersPage from "./pages/Winners";
+import PastHackathonsPage from "./pages/PastHackathons";
 
 // Layout components
 import Header from "./components/layout/Header";
@@ -54,7 +55,8 @@ function App() {
           <Route path="/update-profile" element={<UpdateProfile />} />
           <Route path="/teams" element={<Teams />} />
           <Route path="/prompts" element={<Prompts />} />
-          <Route path="/winners" element={<WinnersPage />} />
+            <Route path="/winners" element={<WinnersPage />} />
+            <Route path="/past-hackathons" element={<PastHackathonsPage />} />
         </Routes>
         <Footer />
       </Router>

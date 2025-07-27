@@ -3,25 +3,25 @@ export const promptsData = [
   {
     id: 1,
     title: 'Cybersecurity Challenge',
-    description: 'Real-world cybersecurity challenge focused on human security factors!',
+    description: 'Pen-test a simulated corporate network and secure discovered weaknesses.',
     difficulty: '3/5'
   },
   {
     id: 2,
     title: 'Data Analytics/Data Science Challenge',
-    description: 'Manufacturing-focused data analytics project!',
+    description: 'Analyze factory sensor data to spot trends and improve production.',
     difficulty: '4/5'
   },
   {
     id: 3,
     title: 'Full-Stack Challenge',
-    description: 'Startup-focused full-stack web application!',
+    description: 'Build a complete web app for a startup idea from database to UI.',
     difficulty: '4/5'
   },
   {
     id: 4,
     title: 'Game Development Challenge',
-    description: "Can't be too specific about this one!",
+    description: 'Create a small game prototype around a surprise summer theme.',
     difficulty: '1-5/5'
   },
 ];

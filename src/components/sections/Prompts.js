@@ -29,7 +29,7 @@ const Prompts = () => {
         <section className="prompts-section" id="prompts">
             <div className="prompts-container">
                 <SectionHeader
-                    title="2025 Categories"
+                    title="Summer 2025 Categories"
                     subtitle="Brief overviews of this year's challenge areas"
                 />
 
