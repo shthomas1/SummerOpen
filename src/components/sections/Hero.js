@@ -24,11 +24,6 @@ const Hero = () => {
             Explore the winning submissions below.
           </p>
 
-          {/* <div className="hero-cta-group">
-            <Link to="/register" className="register-button register-button-large">
-              Register Now
-            </Link>
-          </div> */}
 
           <div className="hero-stats">
             <div className="hero-stat">

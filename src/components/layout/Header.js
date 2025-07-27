@@ -252,25 +252,7 @@ const Header = () => {
                     </div>
                   )}
                 </div>
-              ) : (
-                <>
-                  <button
-                    onClick={handleGitHubLogin}
-                    className="login-link"
-                    disabled={loading}
-                  >
-                    <FaGithub />
-                    {loading ? "Connecting..." : "Login"}
-                  </button>
-                  <Link
-                    to="/register"
-                    className="nav-cta"
-                    onClick={() => isMenuOpen && toggleMenu()}
-                  >
-                    Register
-                  </Link>
-                </>
-              )}
+              ) : null}
               <Link
                 to="/winners"
                 className="nav-cta"

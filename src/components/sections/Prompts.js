@@ -2,7 +2,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import SectionHeader from '../ui/SectionHeader';
-import Button from '../ui/Button';
 import { promptsData } from '../../data/prompts';
 import "../../styles/sections/Prompts.css";
 
@@ -30,8 +29,8 @@ const Prompts = () => {
         <section className="prompts-section" id="prompts">
             <div className="prompts-container">
                 <SectionHeader
-                    title="Challenge Prompts"
-                    subtitle="Choose from four realistic challenges designed to test your skills and creativity. Released at 6:00 AM CST on June 28th, 2025!"
+                    title="2025 Categories"
+                    subtitle="Brief overviews of this year's challenge areas"
                 />
 
                 <motion.div
@@ -62,29 +61,6 @@ const Prompts = () => {
                                     {prompt.description}
                                 </p>
 
-                                <div className="prompt-actions">
-                                    <a
-                                        href={prompt.driveLink}
-                                        className="view-button"
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        style={{ pointerEvents: prompt.driveLink.includes('PLACEHOLDER') ? 'none' : 'auto' }}
-                                    >
-                                        Drive Link
-                                    </a>
-                                </div>
-
-                                {/* Coming Soon Overlay for placeholder links */}
-                                {prompt.driveLink.includes('PLACEHOLDER') && (
-                                    <div className="coming-soon-overlay">
-                                        <div className="coming-soon-text">
-                                            Coming Soon!<br />
-                                            <span className="coming-soon-subtext">
-                                                
-                                            </span>
-                                        </div>
-                                    </div>
-                                )}
                             </motion.div>
                         ))}
                     </div>

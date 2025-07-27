@@ -46,7 +46,7 @@ const Countdown = ({ targetDate, header = false }) => {
 
   return (
     <div className="countdown-wrapper">
-      {timerComponents.length ? timerComponents : <span>The event has started!</span>}
+      {timerComponents.length ? timerComponents : <span>Event concluded!</span>}
     </div>
   );
 };
