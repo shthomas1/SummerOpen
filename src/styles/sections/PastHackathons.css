@@ -1,0 +1,27 @@
+.past-hackathons {
+  background-color: #fdfdfd;
+  padding: 4rem 1rem;
+}
+
+.past-hackathons .carousel {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.carousel-item {
+  text-align: center;
+}
+
+.carousel-item img {
+  max-width: 100%;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.event-name {
+  margin-top: 1rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+}

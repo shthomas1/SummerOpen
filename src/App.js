@@ -20,11 +20,11 @@ import Winners from "./components/sections/Winners";
 import Prompts from "./components/sections/Prompts";
 import Benefits from "./components/sections/Benefits";
 import Team from "./components/sections/Team";
+import PastHackathons from "./components/sections/PastHackathons";
 import FAQ from "./components/sections/FAQ";
 import Sponsors from "./components/sections/Sponsors";
 
 // Pages
-import Register from "./pages/Register";
 import Teams from "./pages/Teams";
 
 // HomePage component that combines all sections
@@ -38,6 +38,7 @@ const HomePage = () => (
     <Prompts />
     <Benefits />
     <Team />
+    <PastHackathons />
     <Sponsors />
   </>
 );
@@ -49,7 +50,6 @@ function App() {
         <Header />
         <Routes>
           <Route path="/" element={<HomePage />} />
-          <Route path="/register" element={<Register />} />
           <Route path="/thank-you" element={<ThankYou />} />{" "}
           <Route path="/update-profile" element={<UpdateProfile />} />
           <Route path="/teams" element={<Teams />} />

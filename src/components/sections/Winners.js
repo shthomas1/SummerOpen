@@ -8,7 +8,7 @@ const Winners = () => {
     <section id="winners" className="winners-section">
       <div className="container">
         <SectionHeader
-          title="Category Winners"
+          title="Summer 2025 Winners"
           subtitle="Congratulations to our top projects!"
         />
         <div className="winners-grid">

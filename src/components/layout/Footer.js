@@ -19,7 +19,6 @@ const Footer = () => {
               <li><a href="#benefits">Benefits</a></li>
               <li><a href="#mentors">Mentors</a></li>
               <li><a href="#faq">FAQ</a></li>
-              <li><a href="/register">Register</a></li>
             </ul>
           </div>
           
