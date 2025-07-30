@@ -22,6 +22,6 @@ export const promptsData = [
     id: 4,
     title: 'Game Development Challenge',
     description: 'Create a small game prototype around a surprise summer theme.',
-    difficulty: '1-5/5'
+    difficulty: '2/5'
   },
 ];

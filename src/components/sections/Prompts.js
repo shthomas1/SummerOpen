@@ -53,7 +53,7 @@ const Prompts = () => {
                                         <h3 className="prompt-title">{prompt.title}</h3>
                                     </div>
                                     <span className="difficulty-badge">
-                                        {prompt.difficulty}
+                                        Challenge Rating: {prompt.difficulty}
                                     </span>
                                 </div>
 
